@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HotKeys</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            background: lightgrey;
+        }
+        body *{
+            background: lightgrey;
+        }
+        body > div {
+            width: 50%;
+        }
+        .edit-box {
+            position: absolute;
+            width: 250px;
+            height: 150px;
+            outline: 1px solid rebeccapurple;
+            background: lightblue;
+        }
+
+        .edit-box_item-pos-1 {
+            left: 100px;
+            top: 90px;
+        }
+
+        .edit-box_item-pos-2 {
+            left: 100px;
+            top: 290px;
+        }
+
+        .edit-box_item-pos-3 {
+            left: 100px;
+            top: 490px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <span>focus on EditBox</span><br>
+    <span>push "Ctrl"/"Meta" + "E" to edit EditBox</span><br>
+    <span>push "Ctrl"/"Meta" + "S" to save EditBox</span><br>
+    <span>push "Escape" to live EditBox without save</span>
+
+</div>
+    <div class="edit-box edit-box_item-pos-1">
+        Lorem ipsum dolor 1.
+    </div>
+
+    <div class="edit-box edit-box_item-pos-2">
+        Lorem ipsum dolor 2.
+    </div>
+    <div class="edit-box edit-box_item-pos-3">
+        Lorem ipsum dolor 3.
+    </div>
+
+    <script>
+
+        class EditBox {
+            constructor({dataAttr}) {
+                this.dataAttr = dataAttr;
+
+                this.box = null;
+                this.boxCounter = 0;
+
+                this._focusabler();
+                document.addEventListener('focus', event => {
+                    if (!event.target.dataset[dataAttr]) return;
+                    this.box = event.target;
+                    if (this.box.dataset[dataAttr] !== 'true') return;
+                    this._boxFocus()
+                }, true);
+                document.addEventListener('blur', event => {
+                    if (!event.target.dataset[dataAttr]) return;
+                    this._boxBlur()
+                }, true);
+                document.addEventListener('keydown', event => {
+                    if (!event.target.dataset[dataAttr]) return;
+                    this._keyListener()
+                });
+            }
+            _focusabler() {
+                let boxes = document.querySelectorAll(`[data-${this.dataAttr}]`);
+                for (let box of boxes) {
+                    box.setAttribute('tabindex', '' + ++this.boxCounter);
+                }
+            }
+            _boxFocus() {
+                this.box.style.outline = '2px solid blueviolet';
+            }
+            _boxBlur() {
+                this.box.style.outline = '';
+            }
+            _keyListener() {
+                event.preventDefault();
+                if (event.code === 'KeyE' && (event.ctrlKey || event.metaKey)) {
+                    this._renderEditBox();
+                    this._edit();
+                }
+                if (event.code === 'Tab' || (event.code === 'Tab' && event.shiftKey)) {
+                    event.target.blur();
+                }
+
+            }
+            _renderEditBox() {
+                let boxCoord = this.box.getBoundingClientRect();
+                this.editBox = document.createElement('div');
+
+                this.editBox.style.position = 'absolute';
+                this.editBox.style.top = boxCoord.top + pageYOffset + 'px';
+                this.editBox.style.left = boxCoord.left + 'px';
+                this.editBox.style.zIndex = '100';
+
+                this._renderTextarea();
+                this._renderInterface();
+
+                document.body.insertAdjacentElement('afterBegin', this.editBox);
+            }
+            _renderTextarea() {
+                let boxCoord = this.box.getBoundingClientRect();
+                this.textarea = document.createElement('textarea');
+                this.textarea.style.height = boxCoord.height + 'px';
+                this.textarea.style.width = boxCoord.width + 'px';
+                this.textarea.style.backgroundColor = 'lightgreen';
+                this.textarea.style.overflow = 'auto';
+
+                this.textarea.addEventListener('keydown', event => {
+                    if (event.code === 'KeyS' && (event.ctrlKey || event.metaKey)) {
+                        event.preventDefault();
+                        this._save();
+                    }
+                    if (event.code === 'Escape') {
+                        this._escape();
+                    }
+                });
+
+                this.textarea.addEventListener('blur', () => {
+                    if (this.editBox) {
+                        this.textarea.focus();
+                    }
+                }, true);
+
+                this.editBox.insertAdjacentElement('afterBegin', this.textarea);
+
+            }
+
+            _renderInterface() {
+                this._interface = document.createElement('div');
+
+                let saveButton = document.createElement('input');
+                saveButton.type = 'button';
+                saveButton.value = 'save';
+
+                let escapeButton = document.createElement('input');
+                escapeButton.type = 'button';
+                escapeButton.value = 'escape';
+
+                this._interface.append(saveButton, escapeButton);
+
+                this._interface.addEventListener('click', event => {
+                    if (event.target.tagName !== 'INPUT') return;
+                    if (event.target.value === 'save') {
+                        this._save();
+                    }
+                    if (event.target.value === 'escape') {
+                        this._escape();
+                    }
+                });
+
+                this.editBox.insertAdjacentElement('beforeEnd', this._interface);
+            }
+
+            _edit() {
+                this.textarea.value = this.box.innerHTML;
+                this.box.style.visibility = 'hidden';
+                this.textarea.focus();
+            }
+
+            _save() {
+                this.box.style.visibility = 'visible';
+                this.box.innerHTML = this.textarea.value;
+                this.box.style.overflow = 'auto';
+
+                this.editBox.remove();
+                this.editBox = null;
+
+                this.box.focus();
+            }
+            _escape() {
+                this.box.style.visibility = 'visible';
+                this.editBox.remove();
+                this.editBox = null;
+
+                this.box.focus();
+            }
+        }
+
+        let boxes = document.querySelectorAll('.edit-box');
+        for (let box of boxes) {
+            box.setAttribute('data-editable', 'true');
+        }
+
+        let editBox = new EditBox({
+            dataAttr: 'editable'
+        })
+    </script>
+</body>
+</html>

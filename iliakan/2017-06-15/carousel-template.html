@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>carousel</title>
+    <style>
+        body {
+            background: grey;
+            padding: 10px;
+        }
+
+        .carousel {
+            position: relative;
+            margin: 0 auto;
+            width: 398px;
+            padding: 10px 40px;
+            border: 1px solid #CCC;
+            border-radius: 15px;
+            background: #eee;
+        }
+
+        .carousel img {
+            width: 130px;
+            height: 130px;
+            /* по умолчанию inline, в ряде браузеров это даст лишнее пространство вокруг элементов */
+
+            display: block;
+        }
+
+        .arrow {
+            position: absolute;
+            top: 60px;
+            padding: 0;
+            background: #ddd;
+            border-radius: 15px;
+            border: 1px solid gray;
+            font-size: 24px;
+            line-height: 24px;
+            color: #444;
+            display: block;
+        }
+
+        .arrow:focus {
+            outline: none;
+        }
+
+        .arrow:hover {
+            background: #ccc;
+            cursor: pointer;
+        }
+
+        .prev {
+            left: 7px;
+        }
+
+        .next {
+            right: 7px;
+        }
+
+        .gallery {
+            width: 390px;
+            overflow: hidden;
+        }
+
+        .gallery ul {
+            height: 130px;
+            width: 9999px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            transition: margin-left 250ms;
+            /* remove white-space between inline-block'ed li */
+            /* http://davidwalsh.name/remove-whitespace-inline-block */
+
+            font-size: 0;
+        }
+
+        .gallery li {
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js"></script>
+    <script type="text/template" id="carouselTemplate">
+        <div id="carousel" class="carousel">
+            <button class="arrow prev">⇦</button>
+            <div class="gallery">
+                <ul class="images">
+                    <% for (let i = 0; i < images.length; i++) { %>
+                    <li><img src='<%= images[i] %>'></li>
+                    <% } %>
+                </ul>
+            </div>
+            <button class="arrow next">⇨</button>
+        </div>
+    </script>
+    <script>
+        class Carousel {
+            constructor({width, count, images}) {
+                this.images = images || [];
+
+                this.width = width;
+                this.count = count;
+
+                this._position = 0;
+            }
+
+            getElem() {
+                if (!this.elem) this._render();
+                return this.elem;
+            }
+
+            _render() {
+                let tmpl = _.template(document.getElementById('carouselTemplate').innerHTML);
+                tmpl = tmpl({images: this.images});
+                console.log(tmpl);
+                this.elem = document.createElement('div');
+                this.elem.innerHTML = tmpl;
+                this.elem = this.elem.firstElementChild;
+
+                this.list = this.elem.querySelector('ul');
+                this.listElems = this.elem.querySelectorAll('li');
+
+                this.buttonPrev = this.elem.querySelector('.prev');
+                this.buttonNext = this.elem.querySelector('.next');
+
+                this.buttonPrev.onclick = () => this.prev();
+                this.buttonNext.onclick = () => this.next();
+            }
+
+            prev() {
+                this._position = Math.min(this._position + this.width * this.count, 0)
+                this.list.style.marginLeft = this._position + 'px';
+            }
+
+            next() {
+                this._position = Math.max(this._position - this.width * this.count, -this.width * (this.listElems.length - this.count));
+                this.list.style.marginLeft = this._position + 'px';
+            }
+
+        }
+
+        let carousel = new Carousel({
+            width: 130,
+            count: 3,
+            images: [
+                "https://js.cx/carousel/1.png",
+                "https://js.cx/carousel/2.png",
+                "https://js.cx/carousel/3.png",
+                "https://js.cx/carousel/4.png",
+                "https://js.cx/carousel/5.png",
+                "https://js.cx/carousel/6.png",
+                "https://js.cx/carousel/7.png",
+                "https://js.cx/carousel/8.png",
+                "https://js.cx/carousel/9.png",
+                "https://js.cx/carousel/10.png",
+            ]
+        });
+
+        document.body.insertAdjacentElement('afterBegin', carousel.getElem());
+    </script>
+</body>
+</html>

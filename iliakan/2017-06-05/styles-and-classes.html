@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    .button {
+        -moz-border-radius: 8px;
+        -webkit-border-radius: 8px;
+        border-radius: 8px;
+        border: 2px groove green;
+        display: block;
+        height: 30px;
+        line-height: 30px;
+        width: 100px;
+        text-decoration: none;
+        text-align: center;
+        color: red;
+        font-weight: bold;
+    }
+
+    .notification {
+        position: absolute;
+        color: green;
+        background-color: lightgreen;
+        border: 1px solid darkgreen;
+        border-radius: 5px;
+        padding: 20px;
+    }
+    .hidden {
+        display: none;
+    }
+</style>
+<body>
+<script>
+    document.body.style.backgroundColor = 'grey';
+    let a = document.createElement('a');
+    a.innerHTML = 'Click me!';
+    let button = '-moz-border-radius: 8px;\n' +
+        '    -webkit-border-radius: 8px;\n' +
+        '    border-radius: 8px;\n' +
+        '    border: 2px groove green;\n' +
+        '    display: block;\n' +
+        '    height: 30px;\n' +
+        '    line-height: 30px;\n' +
+        '    width: 100px;\n' +
+        '    text-decoration: none;\n' +
+        '    text-align: center;\n' +
+        '    color: red;\n' +
+        '    font-weight: bold;';
+    // a.style.cssText = button;
+    a.href = '#';
+    a.classList.add('button');
+    document.body.prepend(a);
+
+    function showNotification({top, right, html, className, cssText}) {
+        top = (top || 25) + 'px';
+        right = (right || 25) + 'px';
+        className = className || 'notification';
+        html = html || '<b><em>Hello! </em>This is a notification message!</b>';
+        let notification = document.createElement('div');
+        notification.style.top = top;
+        notification.style.right = right;
+        if (className) notification.classList.add(className);
+        if (cssText) notification.style.cssText = cssText;
+        notification.innerHTML = html;
+
+        setInterval(() => notification.classList.toggle('hidden'), 3000);
+
+        return notification;
+    }
+
+</script>
+</body>
+</html>

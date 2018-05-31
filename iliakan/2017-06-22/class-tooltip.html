@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>behavior-tooltip</title>
+</head>
+<style>
+    body {
+        background: grey;
+    }
+
+    .tooltip-owner {
+        background: lightgreen;
+        cursor: pointer;
+    }
+
+    .tooltip-child {
+        background: lightblue;
+    }
+
+    .tooltip {
+        background: lightyellow;
+        border: 1px solid black;
+        border-radius: 5px;
+        text-align: center;
+        width: 200px;
+        padding: 5px;
+    }
+</style>
+<body>
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam animi assumenda dicta ea eligendi esse facere
+    impedit ipsa maxime nemo obcaecati officiis, pariatur placeat quae quas soluta sunt tempora veritatis vitae
+    voluptatibus? Animi consequatur cum delectus expedita iste libero Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam animi assumenda dicta ea eligendi esse facere
+    impedit ipsa maxime nemo obcaecati officiis, pariatur placeat quae quas soluta sunt tempora veritatis vitae
+    voluptatibus? Animi consequatur cum delectus expedita iste libero Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam animi assumenda dicta ea eligendi esse facere
+    impedit ipsa maxime nemo obcaecati officiis, pariatur placeat quae quas soluta sunt tempora veritatis vitae
+    voluptatibus? Animi consequatur cum delectus expedita iste libero perferendis perspiciatis, porro, quia, similique
+    vel voluptate voluptatem. Consectetur deserunt facilis fugiat nobis provident repellat similique temporibus unde
+    voluptas voluptatum. Ab commodi cumque dolores ea enim illo illum in incidunt inventore iure qui quibusdam ratione
+    sit tempora, vero! Consequuntur debitis deserunt dicta dolor, explicabo harum id ipsa laborum quasi, repellat, saepe
+    tempore voluptates. Corporis dignissimos quasi sunt temporibus voluptas. Assumenda at cumque deserunt distinctio
+    dolorem ea est facilis, id iste itaque iure minus mollitia necessitatibus quia quis ratione repellendus rerum, sed
+    sequi sint, vel voluptatem voluptates. Accusamus animi commodi consequuntur cupiditate in itaque libero mollitia
+    non, voluptatum! <span class="tooltip-owner" data-tooltip="<p>A alias aliquid architecto beatae consectetur corporis
+    culpa debitis dolor dolorem et eveniet excepturi, harum illum ipsa nobis, numquam odio placeat quas qui quidem quos
+    repellat repellendus similique sit soluta temporibus totam unde vel voluptas voluptatum! Culpa, ipsum magni maiores
+    officiis omnis quisquam quo rerum voluptatem.</p>">Blanditiis doloremque,</span> facilis libero nemo quas sint ut. Ab asperiores beatae consequuntur labore
+    laudantium nam numquam, quibusdam ratione voluptate. Aperiam cupiditate dolore ducimus esse exercitationem expedita
+    harum <span class="tooltip-owner" data-tooltip="<p>A alias aliquid architecto beatae consectetur corporis
+    culpa debitis dolor dolorem et eveniet excepturi, harum illum ipsa nobis, numquam odio placeat quas qui quidem quos
+    repellat repellendus similique sit soluta temporibus totam unde vel voluptas voluptatum! Culpa, ipsum magni maiores
+    officiis omnis quisquam quo rerum voluptatem.</p>">Blanditiis doloremque,</span> laudantium, nemo officiis quaerat quidem quo ratione sint tempora tenetur velit. Adipisci
+    aperiam atque cumque dignissimos doloremque enim error eum explicabo fugit impedit in ipsam laboriosam maxime minus,
+    molestiae nam natus necessitatibus nihil nisi odio officia omnis perferendis porro repellat repudiandae sunt
+    suscipit velit veritatis vero vitae. Autem ducimus error exercitationem iste nam numquam officiis porro quidem
+    quisquam unde. Autem dolor eius facilis iusto obcaecati! Aliquid consequuntur dolore ea eius explicabo illo ipsam,
+    ipsum laboriosam magni nobis reprehenderit tempore voluptas. A alias aliquid architecto beatae consectetur corporis
+    culpa debitis dolor dolorem et eveniet excepturi, harum illum ipsa nobis, numquam odio placeat quas qui quidem quos
+    repellat repellendus similique sit soluta temporibus totam unde vel voluptas voluptatum! Culpa, ipsum magni maiores
+    officiis omnis quisquam quo rerum voluptatem. Asperiores beatae corporis culpa debitis dolor ducimus eius, et
+    facilis id incidunt molestias nam nemo nobis officia pariatur quisquam sapiente sint unde vel velit? Accusantium
+    harum in incidunt ipsum laudantium, nemo officiis quaerat quidem quo ratione sint tempora tenetur velit. Adipisci
+    aperiam atque cumque dignissimos doloremque enim error eum explicabo fugit impedit in ipsam laboriosam maxime minus,
+    molestiae nam natus necessitatibus nihil nisi odio officia omnis perferendis porro repellat repudiandae <span class="tooltip-owner" data-tooltip="<p>error exercitationem iste nam numquam officiis porro quidem
+    quisquam unde. Autem dolor eius facilis iusto obcaecati! Aliquid consequuntur dolore ea</p>">Autem ducimus</span> sunt
+    suscipit velit veritatis vero vitae. Error exercitationem iste nam numquam officiis porro quidem
+    quisquam unde. Autem dolor eius facilis iusto obcaecati! Aliquid consequuntur dolore ea eius explicabo illo ipsam,
+    ipsum laboriosam magni nobis reprehenderit tempore voluptas. A alias aliquid architecto beatae consectetur corporis
+    culpa debitis dolor dolorem et eveniet excepturi, harum illum ipsa nobis, numquam odio placeat quas qui quidem quos
+    repellat repellendus similique sit soluta temporibus totam unde vel voluptas voluptatum! Culpa, ipsum magni maiores
+    officiis omnis quisquam quo rerum voluptatem. Asperiores beatae corporis culpa debitis dolor ducimus eius, et
+    facilis id incidunt molestias nam nemo nobis officia pariatur quisquam sapiente sint unde vel velit? Accusantium harum in incidunt ipsum laudantium, nemo officiis quaerat quidem quo ratione sint tempora tenetur velit. Adipisci
+    aperiam atque cumque dignissimos doloremque enim error eum explicabo fugit impedit in ipsam laboriosam maxime minus,
+    molestiae nam natus necessitatibus nihil nisi odio officia omnis perferendis porro repellat repudiandae sunt
+    suscipit velit veritatis vero vitae. Autem ducimus error exercitationem iste nam numquam officiis porro quidem
+    quisquam unde. Autem dolor eius facilis iusto obcaecati! Aliquid consequuntur dolore ea eius explicabo illo ipsam,
+    ipsum laboriosam magni nobis reprehenderit tempore voluptas. A alias aliquid architecto beatae consectetur corporis
+    culpa debitis dolor dolorem et eveniet excepturi, harum illum ipsa nobis, numquam odio placeat quas qui quidem quos
+    repellat repellendus similique sit soluta temporibus totam unde vel voluptas voluptatum! Culpa, ipsum magni maiores
+    officiis omnis quisquam quo rerum voluptatem. Asperiores beatae corporis culpa debitis dolor ducimus eius, et
+    facilis id incidunt molestias nam nemo nobis officia pariatur quisquam sapiente sint unde vel velit? AccusantiumAliquid consequuntur dolore ea eius explicabo illo ipsam,
+    ipsum laboriosam magni nobis reprehenderit tempore voluptas. A alias aliquid architecto beatae consectetur corporis
+    culpa debitis dolor dolorem et eveniet excepturi, harum illum ipsa nobis, numquam odio placeat quas qui quidem quos
+    repellat repellendus similique sit soluta temporibus totam unde vel voluptas voluptatum! Culpa, ipsum magni maiores
+    officiis omnis quisquam quo rerum voluptatem. Asperiores beatae corporis culpa debitis dolor ducimus eius, et
+    facilis id incidunt molestias nam nemo nobis officia pariatur quisquam sapiente sint unde vel velit? AccusantiumAliquid consequuntur dolore ea eius explicabo illo ipsam,
+    ipsum laboriosam magni nobis reprehenderit tempore voluptas. A alias aliquid architecto beatae consectetur corporis
+    culpa debitis dolor dolorem et eveniet excepturi, harum illum ipsa nobis, numquam odio placeat quas qui quidem quos
+    repellat repellendus similique sit soluta temporibus totam unde vel voluptas voluptatum! Culpa, ipsum magni maiores
+    officiis omnis quisquam quo rerum voluptatem. Asperiores beatae corporis culpa debitis dolor ducimus eius, et
+    facilis id incidunt molestias nam nemo nobis officia pariatur quisquam sapiente sint unde vel velit? Accusantium
+    Aliquid consequuntur dolore ea eius explicabo illo ipsam,<span class="tooltip-owner" data-tooltip="<p>debitis dolor dolorem et eveniet excepturi, harum illum ipsa nobis, numquam odio placeat quas qui quidem quos
+    repellat</p>">Autem ducimus</span>
+    ipsum laboriosam magni nobis reprehenderit tempore voluptas. A alias aliquid architecto beatae consectetur corporis
+    culpa debitis dolor dolorem et eveniet excepturi, harum illum ipsa nobis, numquam odio placeat quas qui quidem quos
+    repellat repellendus similique sit soluta temporibus totam unde vel voluptas voluptatum! Culpa, ipsum magni maiores
+    officiis omnis quisquam quo rerum voluptatem. Asperiores beatae corporis culpa debitis dolor ducimus eius, et
+    facilis id incidunt molestias nam nemo nobis officia pariatur quisquam sapiente sint unde vel velit? AccusantiumAliquid consequuntur dolore ea eius explicabo illo ipsam,
+    ipsum laboriosam magni nobis reprehenderit tempore voluptas. A alias aliquid architecto beatae consectetur corporis
+    culpa debitis dolor dolorem et eveniet excepturi, harum illum ipsa nobis, numquam odio placeat quas qui quidem quos
+    repellat repellendus similique sit soluta temporibus totam unde vel voluptas voluptatum! Culpa, ipsum magni maiores
+    officiis omnis quisquam quo rerum voluptatem. Asperiores beatae corporis culpa debitis dolor ducimus eius, et
+    facilis id incidunt molestias nam nemo nobis officia pariatur quisquam sapiente sint unde vel velit? Accusantium</p>
+
+    <script>
+        class Tooltip {
+            constructor({className, dataAttr}) {
+                Tooltip.className = className;
+                Tooltip.dataAttr = dataAttr;
+                this.tooltip = null;
+            }
+
+            show(event) {
+                let self = this;
+                if (!event.target.dataset[Tooltip.dataAttr]) return;
+                self.anchorCoords = event.target.getBoundingClientRect();
+
+
+                render();
+                positionAt();
+
+                function render() {
+                    self.tooltip = document.createElement('div');
+                    self.tooltip.classList.add(Tooltip.className);
+                    self.tooltip.insertAdjacentHTML('afterBegin', event.target.dataset[Tooltip.dataAttr]);
+                    event.target.insertAdjacentElement('beforeBegin', self.tooltip);
+                }
+
+                function positionAt() {
+                    let margin = 3;
+                    let top = pageYOffset + self.anchorCoords.top
+                        - self.tooltip.offsetHeight - margin;
+                    let left = (self.anchorCoords.left + self.anchorCoords.width / 2)
+                        - self.tooltip.offsetWidth / 2;
+
+                    self.tooltip.style.position = 'absolute';
+
+                    if (self.anchorCoords.top < self.tooltip.offsetHeight + margin )
+                        top = pageYOffset + self.anchorCoords.bottom + margin;
+                    if (left + self.tooltip.offsetWidth > document.documentElement.clientWidth)
+                        left -= (left + self.tooltip.offsetWidth + margin) - document.documentElement.clientWidth;
+                    if (left < 0)
+                        left = margin;
+
+                    self.tooltip.style.top = top + 'px';
+                    self.tooltip.style.left = left + 'px';
+
+                }
+
+            }
+
+            hide(event) {
+                if (!event.target.dataset[Tooltip.dataAttr]) return;
+                this.tooltip.remove();
+                this.tooltip = null;
+            }
+        }
+
+        let tooltip = new Tooltip({
+            className: 'tooltip',
+            dataAttr: 'tooltip'
+        });
+
+        document.addEventListener('mouseover', tooltip.show);
+        document.addEventListener('mouseout', tooltip.hide);
+    </script>
+</body>
+</html>

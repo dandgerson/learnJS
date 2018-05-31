@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js"></script>
+    <style>
+        body {
+            background: grey;
+        }
+        .menu ul {
+            display: none;
+            margin: 0;
+        }
+
+        .menu .title {
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .menu .title:before {
+            content: '▶';
+            padding-right: 6px;
+            color: green;
+        }
+
+        .menu.open ul {
+            display: block;
+        }
+
+        .menu.open .title:before {
+            content: '▼';
+        }
+    </style>
+</head>
+<body>
+    <div class="menu" id="sweetsMenu">
+        <span class="title">Сладости пресладости</span>
+    </div>
+    <script>
+        class Menu {
+            constructor({ elem, title, items }) {
+                this.title = title;
+                this.items = items || [];
+                this.elem = elem || this._getElem();
+                this.elem.onmousedown = () => this._onMouseDown();
+                this.elem.onclick = () => this._onClick();
+            }
+
+            _getElem() {
+                if(!this.elem) this._render();
+                return this.elem;
+            }
+
+            _render() {
+                this.elem = document.createElement('div');
+                this.elem.classList.add('menu');
+
+                let titleElem = document.createElement('span');
+                this.elem.append(titleElem);
+                titleElem.classList.add('title');
+                titleElem.insertAdjacentText('afterBegin', this.title);
+                document.body.prepend(this.elem);
+            }
+
+            _renderItems() {
+                let list = document.createElement('ul');
+                this.items.forEach( (item) => {
+                    let li = document.createElement('li');
+                    li.textContent = item;
+                    list.append(li);
+                });
+                this.elem.append(list);
+            }
+
+            open() {
+                if (!this.elem.querySelector('ul')) {
+                    this._renderItems();
+                }
+                this.elem.classList.add('open');
+            }
+
+            close() {
+                this.elem.classList.remove('open');
+            }
+
+            toggle() {
+                if (this.elem.classList.contains('open')) this.close();
+                else this.open();
+            }
+
+            _onMouseDown() {
+                return false;
+            }
+
+            _onClick() {
+                this.toggle();
+            }
+        }
+
+        let menu = new Menu({
+            title: "Сладости",
+            items: [
+                "Торт",
+                "Пончик",
+                "Пирожное",
+                "Шоколадка",
+                "Мороженое"
+            ]
+        });
+
+        let sweetsMenu = new Menu({
+            elem: document.getElementById('sweetsMenu'),
+            items: [
+                "Мороженое",
+                "Пончик",
+                "Шоколадка",
+                "Пирожное",
+                "Торт"
+            ]
+        })
+    </script>
+</body>
+</html>

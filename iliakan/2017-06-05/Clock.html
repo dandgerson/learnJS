@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clock</title>
+    <style>
+        body {
+            background-color: grey;
+        }
+        .hour {
+            color: red;
+        }
+        .min {
+            color: green;
+        }
+        .sec {
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+<script>
+    let body = document.body;
+    let h1 = document.createElement('h1');
+    h1.innerHTML = 'Clock';
+    body.insertBefore(h1, body.lastElementChild);
+    let clockDiv = document.createElement('div');
+    clockDiv.id = 'clock';
+    body.insertBefore(clockDiv, body.lastElementChild);
+    clockDiv.innerHTML = '<span class="hour">00</span>:<span class="min">00</span>:<span class="sec">00</span>';
+
+    class Clock {
+        constructor({elem}) {
+            this.elem = elem;
+            this._start();
+        }
+
+        _start() {
+            this._tick();
+            setInterval(this._tick.bind(this), 1000);
+        }
+
+        _tick() {
+            let date = new Date();
+            this.elem.querySelector('.hour').innerHTML = ('0' + date.getHours()).slice(-2);
+            this.elem.querySelector('.min').innerHTML = ('0' + date.getMinutes()).slice(-2);
+            this.elem.querySelector('.sec').innerHTML = ('0' + date.getSeconds()).slice(-2);
+        }
+    }
+
+    let clock = new Clock({elem : clockDiv});
+</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <style>
+
+    body {
+        background: grey;
+    }
+    #field {
+        width: 200px;
+        border: 10px groove black;
+        background-color: #00FF00;
+        position: relative;
+    }
+    
+    #ball {
+        position: absolute;
+        height: 30px;
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div id="field">
+    <img src="./metrics_centreBall_files/ball.svg" id="ball"> . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+  </div>
+
+
+  <script>
+    let field = document.querySelector('#field');
+    let ball = document.querySelector('#ball');
+    let ballY = field.clientHeight / 2 - ball.offsetHeight / 2;
+    let ballX = field.clientWidth / 2 - ball.offsetWidth / 2;
+    console.log(ballY);
+    console.log(ballX);
+    ball.style.top = ballY + 'px';
+    ball.style.left = ballX + 'px';
+  </script>
+
+</body>
+</html>

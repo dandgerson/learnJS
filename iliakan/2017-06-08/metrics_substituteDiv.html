@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            background: grey;
+        }
+        #moving-div {
+            border: 5px groove green;
+            padding: 5px;
+            margin: 10px;
+            background-color: yellow;
+        }
+    </style>
+</head>
+
+<body>
+    Before Before Before
+
+    <div id="moving-div">
+        Text Text Text<br>
+        Text Text Text<br>
+    </div>
+
+    After After After
+    <script>
+        let div = document.getElementById('moving-div');
+        div.style.position = 'absolute';
+        div.style.right = div.style.top = '0';
+
+        let divClone = div.cloneNode(false);
+        divClone.style.position = '';
+        divClone.style.visibility = 'hidden';
+        divClone.style.height = div.clientHeight - (
+            +getComputedStyle(div).paddingTop.slice(0, -2) +
+            +getComputedStyle(div).paddingBottom.slice(0, -2)
+        ) + 'px';
+        div.insertAdjacentElement('beforebegin', divClone);
+    </script>
+</body>
+</html>

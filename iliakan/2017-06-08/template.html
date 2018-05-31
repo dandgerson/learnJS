@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js"></script>
+</head>
+<body>
+    <div id="holder"></div>
+
+    <script type="text/template" id="template">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (let i = 0; i < list.length; i++) { %>
+                    <tr>
+                        <td><%=list[i].name %></td>
+                        <td><%=list[i].age %></td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </script>
+
+    <script>
+        let users = [{
+            name: 'Vasya',
+            age: 10
+        },{
+            name: 'Petya',
+            age: 15
+        },{
+            name: 'Zchenya',
+            age: 20
+        },{
+            name: 'Masha',
+            age: 25
+        },{
+            name: 'Dasha',
+            age: 30
+        }];
+
+        document.querySelector('#holder').innerHTML = _.template(document.querySelector('#template').innerHTML.trim())({
+            list: users
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Calendar</title>
+    <style>
+        body {
+            background-color: gray;
+            text-align: center;
+        }
+        table {
+            border-collapse: collapse;
+        }
+
+        td,
+        th {
+            border: 1px solid black;
+            padding: 3px;
+            text-align: center;
+        }
+
+        th {
+            font-weight: bold;
+            background-color: #E6E6E6;
+        }
+        .yearCalendar {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-around;
+            margin-bottom: 2rem;
+        }
+
+        .today {
+            border: 2px solid red;
+        }
+
+        .holyday {
+            color: red;
+        }
+        .month {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        class Calendar {
+            constructor({elem, year, month}) {
+                this.elem = elem;
+                this.year = year;
+                this.month = month;
+                this.date = new Date(year, month - 1);
+                this._insertCalendar();
+            }
+            _addRow(table) {
+                let row = document.createElement('tr');
+                table.append(row);
+            }
+            _addCell(row) {
+                let cell = document.createElement('td');
+                row.append(cell);
+            }
+            _getMonthString() {
+                let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                return months[this.date.getMonth()];  
+            }
+            _constructTable() {
+                let table = document.createElement('table');
+                table.innerHTML = '<table><thead><tr><th></th></tr><tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th class="holyday">Сб</th><th class="holyday">Вс</th></tr></thead><tbody></tbody></table>';
+                table.rows[0].cells[0].colSpan = 7;
+                table.rows[0].cells[0].innerHTML = this._getMonthString() + ' ' + this.year;
+                for (let row = 2; row < 8; row++) {
+                    this._addRow(table.tBodies[0]);
+                    table.rows[row].dataset.week = '' + (row - 1);
+                    for (let cell = 0; cell < 7; cell++) {
+                        this._addCell(table.rows[table.rows.length - 1]);
+                        if (cell === 6) {
+                            table.rows[row].cells[cell].dataset.weekDay = '' + 0;
+                        } else table.rows[row].cells[cell].dataset.weekDay = '' + (cell + 1);
+                    }
+                }
+                return table;
+            }
+            _constructCalendar() {
+                let table = this._constructTable();
+                outer:
+                while (this.date.getMonth() < this.month) {
+                    let d = 0;
+                    for (let row = 2; row < 8; row++) {
+                        for (let cell = 0; cell < 7; cell++) {
+                            this.date.setDate(this.date.getDate() + d);
+                            if (this.date.getDay() != table.rows[2].cells[cell].dataset.weekDay) continue;
+                            if ((this.date.getMonth() > this.month - 1) ||
+                                (this.date.getMonth() == 0 && this.month == 12)) {
+                                while (table.rows[table.rows.length - 1].cells[0].innerHTML === '')
+                                    table.tBodies[0].lastElementChild.remove();
+                                break outer;
+                            }
+                            table.rows[row].cells[cell].innerHTML = '' + this.date.getDate();
+                            d = 1;
+                        }
+                    }
+                    this.date.setDate(date.getDate() + d);
+                }
+                return table;
+            }
+            _insertCalendar() {
+                let calendar = this._constructCalendar();
+                let date = new Date();
+                for (let week = 0; week < calendar.rows.length; week++) {
+                    for (let day = 0; day < calendar.rows[week].cells.length; day++) {
+                        let currentDay = calendar.rows[week].cells[day];
+                        if (date.getDate() == currentDay.innerHTML &&
+                        date.getMonth() === this.month - 1 &&
+                        date.getFullYear() === this.year) {
+                            currentDay.classList.add('today');
+                        }
+                        if (currentDay.dataset.weekDay == 0 || currentDay.dataset.weekDay == 6)
+                            currentDay.classList.add('holyday');
+                    }
+                }
+                this.elem.append(calendar);
+            }
+        }
+
+        let body = document.body;
+        let date = new Date();
+
+        function createDiv() {
+            return document.createElement('div');
+        }
+
+        function createMonthCalendar() {
+            let calendar = new Calendar({
+                elem: this.node,
+                year: date.getFullYear(),
+                month: this.index
+            })
+            this.node.id = this.name;            
+            this.node.classList.add('month');
+            return this.node;
+        }
+
+
+        let h1 = document.createElement('h1');
+        h1.innerHTML = 'Calendar ' + date.getFullYear();
+        body.insertBefore(h1, body.lastElementChild);
+
+        let yearCalendar2018 = document.createElement('div');
+        yearCalendar2018.id = '2018';
+        yearCalendar2018.classList.add('yearCalendar');
+        body.lastElementChild.before(yearCalendar2018);
+               
+        let months2018 = [
+            {
+                name: 'january',
+                index: 1,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'february',
+                index: 2,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'march',
+                index: 3,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'april',
+                index: 4,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'may',
+                index: 5,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'june',
+                index: 6,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'july',
+                index: 7,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'august',
+                index: 8,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'september',
+                index: 9,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'october',
+                index: 10,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'november',
+                index: 11,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'december',
+                index: 12,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+        ];
+
+         for (let month = 0; month < 12; month++) {
+                yearCalendar2018.append(months2018[month].calendar());
+        }
+
+
+        let h1Clone = h1.cloneNode(true);
+        h1Clone.innerHTML = 'Calendar ' + (date.getFullYear() + 1);
+        yearCalendar2018.after(h1Clone);
+
+        let yearCalendar2019 = yearCalendar2018.cloneNode();
+        yearCalendar2019.id = '2019';
+        body.lastElementChild.before(yearCalendar2019);
+
+        let months2019 = [
+            {
+                name: 'january',
+                index: 1,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'february',
+                index: 2,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'march',
+                index: 3,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'april',
+                index: 4,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'may',
+                index: 5,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'june',
+                index: 6,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'july',
+                index: 7,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'august',
+                index: 8,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'september',
+                index: 9,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'october',
+                index: 10,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'november',
+                index: 11,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+            {
+                name: 'december',
+                index: 12,
+                node: createDiv(),
+                calendar: createMonthCalendar
+            },
+        ];
+
+        date.setFullYear(date.getFullYear() + 1);
+        for (let month = 0; month < 12; month++) {
+            yearCalendar2019.append(months2019[month].calendar());
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            background: grey;
+            text-align: center;
+        }
+
+        table{
+            margin: 5% auto 0 auto;
+            border: 1px solid black;
+        }
+
+        table * {
+            border: 1px solid black;
+        }
+
+        td, th {
+            padding: 5px;
+        }
+
+        th {
+            background: lightgrey;
+            cursor: pointer;
+        }
+
+        th:hover {
+            background: yellow;
+        }
+    </style>
+</head>
+<body>
+
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js"></script>
+    <script>
+        class SortableTable {
+            constructor ({template, data}) {
+                this.template = template({data: data});
+            }
+
+            getElem() {
+                if(!this._elem) this._render();
+                return this._elem;
+            }
+
+            _render() {
+                this._elem = document.createElement('div');
+                this._elem.insertAdjacentHTML('afterBegin', this.template);
+                this._elem = this._elem.firstElementChild;
+
+                this._elem.addEventListener('click', this._sortTable);
+            }
+
+            _sortTable(event) {
+                if (event.target.tagName !== 'TH') return;
+
+                let table = event.target.closest('table');
+                let rows = [... table.tBodies[0].rows];
+                let type = event.target.dataset.type;
+
+                sortRows(rows, type);
+                addSortedRows(rows, table);
+
+                function sortRows(rows, type) {
+                    if (type === 'number')
+                        return rows.sort((a, b) => +a.children[0].innerHTML - +b.children[0].innerHTML);
+                    return rows.sort((a, b) => a.children[1].innerHTML.toLowerCase() > b.children[1].innerHTML.toLowerCase());
+
+                }
+                function addSortedRows(rows, table) {
+                    table.tBodies[0].innerHTML = '';
+                    table.tBodies[0].append(...rows);
+                }
+            }
+        }
+
+        let template = '<table class="sortable-table">\n' +
+            '        <thead>\n' +
+            '            <tr>\n' +
+            '                <th data-type="number">Возраст</th>\n' +
+            '                <th data-type="string">Имя</th>\n' +
+            '            </tr>\n' +
+            '        </thead>\n' +
+            '        <tbody>\n' +
+            '        <% for (let i = 0; i < data.length; i++) { %>\n' +
+            '            <tr>\n' +
+            '                <td><%=data[i].age%></td>\n' +
+            '                <td><%=data[i].name%></td>\n' +
+            '            </tr>\n' +
+            '        <% } %>\n' +
+            '        </tbody>\n' +
+            '    </table>';
+
+        let sortableTable = new SortableTable({
+            template: _.template(template),
+            data: [
+                {name: 'Илья', age: 1},
+                {name: 'Маша', age: 9},
+                {name: 'Женя', age: 12},
+                {name: 'Петя', age: 2},
+                {name: 'Вася', age: 5}
+            ]
+        });
+
+        document.body.insertAdjacentElement('afterBegin', sortableTable.getElem());
+    </script>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            background: grey;
+        }
+        .anchor {
+            position: absolute;
+            height: 50px;
+            width: 150px;
+            background: lightgreen;
+            padding: 5px;
+            text-align: center;
+            border: 2px solid black;
+        }
+
+        #anchorNote {
+            top: 100px;
+            left: 50px;
+        }
+
+        #anchorNoteAbsolute {
+            top: 100px;
+            left: 350px;
+        }
+
+        #anchorNoteIn {
+            top: 250px;
+            left: 50px;
+        }
+
+        .note {
+            border: 1px solid darkslateblue;
+            background: lightyellow;
+            color: darkslateblue;
+            font-style: italic;
+            padding: 5px;
+            z-index: 1000;
+            opacity: 0.85;
+        }
+    </style>
+</head>
+<body>
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad cumque nam nisi, praesentium quod rem reprehenderit ut.
+    Accusamus ad dignissimos ducimus harum ipsam maxime minima numquam, odio officia, pariatur quisquam, tenetur?
+    Assumenda beatae consequuntur culpa cum exercitationem explicabo inventore magnam magni maiores minima nam obcaecati
+    odio officiis, quod recusandae? Adipisci aspernatur aut autem consectetur corporis cupiditate doloremque eaque illo
+    impedit iure minus nesciunt, odit omnis optio porro quasi rem sed similique vel, voluptates? Accusantium ad,
+    architecto consequuntur culpa cum cupiditate debitis doloribus earum enim excepturi ipsum iure minus modi molestiae
+    neque nostrum officia pariatur porro quaerat quas quod recusandae repellendus sunt tempora vero, voluptate
+    voluptatibus! Alias dicta dolor harum illum impedit ipsa magni quae reprehenderit sit soluta unde velit, vitae.
+    Doloribus laboriosam odit perspiciatis praesentium temporibus voluptatibus voluptatum. Accusamus accusantium quasi
+    quo rem sed. Accusantium assumenda eaque earum id praesentium provident quas tenetur. Alias aliquam asperiores,
+    corporis, est labore minima nam neque quia quis quo quod, soluta! A adipisci blanditiis commodi consequuntur est et,
+    fugit inventore iste, iure, modi mollitia nulla officia perspiciatis quis quod rem similique ullam voluptas
+    voluptatem voluptatibus. Amet animi, aspernatur commodi deleniti distinctio doloremque ea est impedit obcaecati
+    officia quas quibusdam repellendus saepe sit velit, vitae voluptatum! Amet at consectetur consequuntur corporis,
+    eius, est fugit illo minima molestiae molestias nemo, nulla quaerat sint sit sunt unde veniam! Accusamus deleniti
+    dignissimos distinctio dolor dolores doloribus eligendi fugiat iusto magnam maxime minima molestiae nisi nobis
+    nostrum quaerat, quam quibusdam sit sunt! Assumenda at blanditiis dignissimos doloremque eius et expedita, hic
+    itaque libero maiores natus odio quam quisquam recusandae sit, suscipit totam voluptate. At, placeat totam. Adipisci
+    assumenda, consectetur deleniti distinctio earum neque nisi nobis nulla odit perspiciatis quia quibusdam ratione
+    rerum saepe vel, veritatis voluptatem. Aliquam animi explicabo facere fugiat impedit ipsa libero minus officiis
+    omnis perspiciatis, praesentium, quam quos ratione recusandae repudiandae temporibus voluptate voluptatum. Adipisci
+    atque blanditiis commodi cum dolorem dolores eaque enim ex impedit in incidunt ipsam, ipsum itaque magnam maxime
+    molestiae nulla odit placeat, porro quas quia quos rem saepe sint sit veniam vero voluptas. Blanditiis facilis
+    inventore nisi placeat praesentium repudiandae tempora voluptatem! Aspernatur consectetur debitis eius est facere,
+    fugiat ipsam, numquam officia qui repellat reprehenderit rerum, sequi soluta totam veritatis vero voluptatem. Amet
+    aspernatur commodi consectetur debitis deserunt distinctio dolor dolore et eveniet ex exercitationem fuga illum
+    ipsam iusto laboriosam libero nam necessitatibus nihil nobis nulla numquam obcaecati officia, placeat porro quam
+    quas quia quis quisquam reprehenderit rerum sed sequi sit soluta sunt tempore totam ut? Commodi consequuntur
+    deserunt ducimus ipsum laboriosam, numquam praesentium quaerat sed vitae. Alias commodi culpa delectus dolor ducimus
+    est excepturi, fuga in ipsa mollitia, neque odit pariatur praesentium quae quibusdam quidem recusandae, repudiandae
+    similique totam vero? Adipisci alias assumenda beatae consectetur cupiditate earum enim eos expedita facere harum
+    ipsam molestiae nihil obcaecati odio, odit perferendis placeat possimus, qui quidem quis quo quod recusandae sit
+    tempore tenetur vitae voluptate? Dignissimos eum ex id magnam natus necessitatibus similique voluptate voluptatem. A
+    alias amet corporis cum delectus dicta doloribus est incidunt inventore minima minus nisi, pariatur reiciendis
+    repudiandae rerum vitae voluptas voluptatibus. Cumque delectus excepturi omnis quasi vitae. Aspernatur, blanditiis
+    consectetur cumque deleniti eos expedita fugit inventore libero magni possimus! Alias consectetur culpa dolorem,
+    ducimus esse explicabo inventore minus mollitia natus nostrum, omnis optio quia quis saepe suscipit ullam vero
+    voluptatum! Amet autem commodi ducimus eum, illum neque nulla odio pariatur, quis quo rerum, unde voluptatibus
+    voluptatum. Ad, aspernatur assumenda consequatur cumque, debitis dolor doloremque doloribus dolorum earum eligendi
+    illo impedit iste iusto minima modi molestiae nesciunt nihil possimus quae quod recusandae sit tempore totam unde
+    velit voluptatem voluptatum. Illum iure perferendis velit. A accusantium adipisci culpa dolorem fuga, incidunt
+    laboriosam laborum quas similique. Aliquid dicta doloribus et, ipsum labore molestias odit possimus sunt! Doloribus
+    earum, illum itaque minus nihil quisquam. Amet aspernatur, cupiditate deserunt itaque quae reiciendis soluta unde?
+    Aspernatur consectetur debitis eligendi est et eveniet exercitationem hic illum in ipsam iste, magnam, magni maxime
+    minima molestias numquam officia quam quo quod rem similique sint sunt tenetur ullam ut, vel vero voluptas? Ab
+    adipisci aperiam aspernatur, atque autem beatae consectetur eius, illo impedit in maiores odit perspiciatis quas
+    quos rem repellat saepe sapiente soluta tenetur veniam vero voluptate voluptatum! Commodi fuga ipsum ratione sit
+    totam. Adipisci aliquam animi aspernatur consequatur delectus distinctio dolorem eligendi enim error eum eveniet
+    facilis fugit hic illo ipsum magnam magni molestiae nobis, officiis quia ratione reiciendis repellat reprehenderit
+    sunt temporibus, totam vero, voluptatibus! Consectetur cumque dolor hic natus nihil non obcaecati, quaerat quam
+    velit! Aliquam, amet, architecto atque autem, consectetur consequuntur cumque debitis deserunt dolores enim esse est
+    et facere fugit harum incidunt inventore iste laboriosam maxime molestias necessitatibus neque nesciunt obcaecati
+    odio officia officiis quibusdam reprehenderit sequi sit suscipit tempore ullam vel voluptatum? Aliquid consequatur
+    illum magnam neque quod quos rerum! Dicta distinctio harum iste nobis non provident, quam repudiandae voluptas! Ab
+    accusamus accusantium architecto aspernatur assumenda autem commodi corporis debitis delectus dolores ducimus error
+    esse expedita explicabo facere harum hic inventore, ipsa, iste maxime minima minus mollitia neque nesciunt nisi
+    nulla obcaecati pariatur perspiciatis placeat quaerat rem repudiandae rerum similique soluta ullam voluptate
+    voluptatem. Accusantium aliquam assumenda at consequatur corporis culpa cupiditate debitis deleniti dicta distinctio
+    eos ex exercitationem facilis fugiat in ipsam iure iusto labore laborum magni maiores molestiae, obcaecati odit
+    officia perferendis perspiciatis possimus quis quisquam reprehenderit, rerum sit temporibus, totam voluptate?
+    Asperiores consectetur corporis error libero obcaecati odio qui quibusdam repellat. Assumenda dolore esse molestiae
+    rem repellat saepe voluptatibus? Aspernatur, dicta doloremque dolores exercitationem incidunt natus nemo obcaecati
+    optio placeat quaerat recusandae rem repudiandae sit sunt, tempore voluptatem, voluptatibus. Aliquid, mollitia quis.
+    Aliquid asperiores aspernatur culpa dignissimos exercitationem fuga impedit laborum odio rem velit. Aperiam
+    aspernatur delectus doloremque ex explicabo incidunt ipsa minima minus neque nisi nulla numquam omnis quod quos
+    reprehenderit, sequi sunt voluptate? Accusamus aspernatur aut doloribus eaque error eveniet fugiat fugit hic in
+    incidunt ipsa ipsam nam necessitatibus nulla, officia pariatur placeat quasi qui quibusdam quod, repellat tempora
+    tenetur veniam veritatis vero. Adipisci consequuntur ipsum iste reprehenderit! Aliquid atque consequatur cupiditate
+    ducimus enim eum excepturi impedit maiores nulla, quibusdam quod rem voluptas. Blanditiis exercitationem expedita
+    illo inventore laboriosam nostrum placeat quam quod velit voluptatibus. Aut culpa, deleniti dicta dignissimos dolore
+    eos expedita hic labore magnam maiores neque nihil nisi omnis, perspiciatis, rerum sint temporibus ullam. Accusamus
+    architecto blanditiis consequuntur debitis distinctio dolore ducimus, exercitationem expedita explicabo facere illum
+    impedit ipsum molestiae nam natus neque nesciunt placeat possimus quaerat ratione saepe sed sint temporibus tenetur
+    vel! Deserunt dignissimos iusto quae reprehenderit! Accusamus accusantium beatae blanditiis consectetur cupiditate
+    deserunt dolores dolorum, excepturi in inventore ipsa, labore magnam nam necessitatibus obcaecati qui quidem quo
+    quod rem repellat sint soluta sunt velit, veniam voluptas! Accusantium ad aliquid earum in labore nam neque nesciunt
+    placeat suscipit velit. Eaque illum laudantium nulla. Amet cupiditate dolores dolorum, facilis nemo reiciendis
+    voluptas voluptatum. Adipisci alias atque delectus dicta esse exercitationem explicabo illum in ipsa laboriosam
+    libero, nisi perspiciatis possimus praesentium quo repellat repudiandae. A aliquid amet aperiam consequuntur dolor
+    dolores dolorum enim esse illum incidunt ipsa, itaque, maxime mollitia nam nesciunt placeat, quam quidem quis
+    reiciendis sint tempora ut vero voluptates. Alias animi, consequuntur delectus deleniti deserunt dolore ducimus
+    earum eos est fuga illo in incidunt ipsam iure iusto molestiae nam nihil nobis nostrum omnis optio provident ratione
+    sed tenetur voluptatem? Accusantium ad amet consequuntur debitis deserunt, eligendi eveniet harum id in iusto nisi
+    nulla odio omnis perferendis, porro praesentium quam quasi sed similique soluta sunt temporibus vitae voluptate. Cum
+    earum eligendi impedit iusto, nobis quae sequi temporibus. Accusantium amet assumenda commodi cum doloremque eaque
+    excepturi fuga incidunt ipsum itaque iusto laborum maiores mollitia nam nihil nulla obcaecati odit perferendis quia
+    reiciendis repellat sapiente sed sequi suscipit tempore temporibus totam ullam vero, voluptates voluptatum.
+    Architecto at atque culpa debitis doloribus dolorum ducimus eius ex fuga hic in incidunt iusto libero minus, nam
+    nemo odio perferendis perspiciatis placeat quidem quos recusandae rerum sequi sit totam vel veritatis voluptates.
+    Accusamus accusantium adipisci commodi fugiat harum id maiores odio sunt tenetur. Accusantium ad adipisci architecto
+    asperiores autem consequatur, distinctio dolorem eveniet exercitationem id impedit minus nam, odio officia
+    perferendis quae quas quos saepe sed sunt ut veritatis voluptate voluptatum! Animi dolores eum laborum minima qui
+    quod voluptas! Ab assumenda at commodi cumque debitis dolorum earum esse id in ipsam itaque iusto laudantium modi
+    obcaecati, porro praesentium quibusdam quidem quis repellat, saepe sapiente sit vero voluptatum. Cupiditate est
+    illum, in laudantium modi nobis quis quod tenetur! Architecto, corporis exercitationem incidunt minima nemo nostrum
+    temporibus unde vitae? Ab alias aut cum cumque, cupiditate, deleniti doloribus ducimus, eligendi eos exercitationem
+    ipsam iure libero magni minima mollitia nulla odit omnis ut vitae voluptas! Animi consequatur fuga nam numquam
+    velit! Accusamus dolor eos exercitationem iste mollitia non perferendis suscipit veniam. A animi blanditiis commodi
+    cum dignissimos, doloribus ea eaque error facilis in iusto magnam, minus modi mollitia non odit omnis optio quasi
+    quibusdam sequi totam ullam vero voluptatum? Aperiam assumenda autem cupiditate labore, molestiae mollitia qui
+    soluta? Aliquid necessitatibus numquam porro vel velit? Aliquid animi aut autem dicta ea exercitationem harum
+    incidunt inventore laboriosam laborum, laudantium maiores non recusandae unde vero! Accusantium alias aliquid dicta
+    dolorem esse, et itaque, mollitia nulla quaerat repudiandae sit ullam. Accusantium eveniet hic in maxime nam odio,
+    pariatur qui repudiandae vero! Accusamus, aliquid consectetur dignissimos ea eum in itaque iure modi nulla optio
+    reiciendis temporibus voluptas. Ad aspernatur assumenda dolor dolorem earum enim expedita facilis fugiat iusto
+    magnam quibusdam rem, vero voluptate? A ipsa libero nisi nulla praesentium! A ab aliquam commodi debitis doloremque
+    illo laboriosam, nulla numquam praesentium, quisquam quo rem, suscipit veritatis. Asperiores commodi dolor dolores,
+    ea eius est id in ipsa iure laboriosam magnam magni modi mollitia natus nesciunt nobis nostrum numquam provident
+    quaerat, quasi quia quidem quos sapiente veniam vitae voluptas voluptate. Adipisci aspernatur atque ea eligendi eum
+    in ipsa, libero minus nobis quisquam quod sint sunt tenetur. Atque debitis, eos harum laborum nemo nihil quaerat.
+    Dolor dolore dolores eum, facere ipsa iste iure iusto labore libero modi molestias non officiis praesentium, quis
+    quod reiciendis rerum soluta veniam. Aliquid at consequuntur ducimus inventore ipsa magni, minus mollitia nemo rerum
+    suscipit. Beatae ex expedita fugiat, ipsam laboriosam odio totam unde. Alias commodi deleniti dolore exercitationem
+    fugiat fugit inventore ipsa ipsum, minus molestias mollitia quisquam quod quos rerum, similique sunt velit
+    voluptatibus. A alias dolore ducimus enim ex magnam magni nobis sapiente suscipit totam! Ab accusantium aspernatur
+    cumque, debitis dolore ea enim excepturi facilis fugit illum in iste iusto labore laborum maiores nam nesciunt omnis
+    perspiciatis quas sit tempora veritatis voluptas voluptate. Amet perferendis rem velit. Aspernatur corporis dolore
+    dolorum eligendi facere hic ipsa minima odio officia porro tempore veniam voluptas, voluptate. At autem blanditiis
+    consequuntur corporis, deserunt error esse est harum iusto molestias praesentium quae quaerat quasi quisquam rem,
+    totam veniam? Ad aliquid atque beatae culpa cumque dolore ducimus error esse est fugit, in incidunt laboriosam
+    laudantium magnam magni minus necessitatibus odio, placeat quasi quisquam quod sint soluta tenetur unde voluptas
+    voluptatem voluptates voluptatum? Aliquid blanditiis corporis doloremque doloribus, earum illum iure odit quas vel?
+    Fugiat labore laboriosam maxime odio qui, suscipit velit. A aliquid amet culpa doloremque esse, eum fuga in labore
+    minus nihil nostrum numquam quasi quibusdam quo quod recusandae repudiandae sit sunt tenetur velit. Aliquam beatae
+    debitis dicta eligendi eveniet repellat sint. Animi assumenda autem delectus itaque iure laboriosam laborum, maxime
+    obcaecati officia officiis omnis pariatur porro repellat reprehenderit repudiandae saepe veritatis voluptas. Aperiam
+    debitis dolores enim est excepturi expedita, fuga fugit id ipsam, iusto labore maiores molestias officiis possimus
+    praesentium quis rerum sunt vel voluptas voluptate. Adipisci cum dolore doloribus eaque illo molestiae
+    necessitatibus odit omnis possimus veniam. Accusamus, adipisci aspernatur delectus ex id illo in inventore ipsam
+    magni minus non nostrum quae reiciendis, repellendus reprehenderit rerum totam vero vitae! Consequatur, enim sunt?
+    Amet architecto cumque, debitis distinctio error, esse impedit ipsa libero magni minima minus molestias natus nihil
+    non odio odit omnis optio perferendis placeat qui quia quis quisquam quo rem repellendus reprehenderit repudiandae
+    saepe soluta temporibus ullam vel.</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt mollitia, quod? Consequatur cum debitis dolorum
+    eum labore libero, magnam nihil odit, omnis, praesentium quidem quod rem repellendus saepe voluptate. Alias
+    aspernatur assumenda at beatae culpa dolore dolorem ipsam iure nihil non pariatur, praesentium quasi qui ratione
+    reiciendis repellat sit temporibus ullam vitae voluptatibus. Delectus ducimus sit unde. Amet architecto debitis est
+    exercitationem hic ipsum maiores maxime non numquam odit officiis perspiciatis porro quis, temporibus voluptas!
+    Autem eos iste odit omnis, quas quis quisquam saepe sit. Ab doloremque enim facilis labore necessitatibus saepe
+    unde. Accusamus ad asperiores assumenda, consectetur consequuntur cupiditate debitis enim eveniet facilis harum hic
+    illum impedit itaque libero molestias natus nemo nisi obcaecati omnis placeat praesentium quam quia, quod
+    repellendus, sequi soluta tempore! Adipisci amet animi architecto, atque beatae deserunt doloremque esse
+    exercitationem illum laudantium maxime minima nemo nesciunt officiis omnis provident quae quia saepe ullam unde.
+    Amet consectetur cumque deleniti earum ipsam officia quasi, similique tempora voluptate voluptates. Blanditiis ea,
+    esse explicabo neque obcaecati quas quidem veritatis! Aperiam commodi consectetur, eligendi exercitationem, ipsam
+    ipsum laborum mollitia nulla, perspiciatis praesentium sit suscipit tempore temporibus! Aliquid architecto, ea harum
+    inventore, laborum maiores molestias pariatur reiciendis soluta, sunt ullam vitae!</p>
+    <script>
+        let anchorNote = document.createElement('div');
+        anchorNote.id = 'anchorNote';
+        anchorNote.classList.add('anchor');
+        anchorNote.insertAdjacentHTML('afterbegin', 'Click me for show Note!');
+        document.body.prepend(anchorNote);
+
+        let anchorNoteAbsolute = document.createElement('div');
+        anchorNoteAbsolute.id = 'anchorNoteAbsolute';
+        anchorNoteAbsolute.classList.add('anchor');
+        anchorNoteAbsolute.insertAdjacentHTML('afterbegin', 'Click me for show Note!');
+        document.body.prepend(anchorNoteAbsolute);
+
+        let anchorNoteIn = document.createElement('div');
+        anchorNoteIn.id = 'anchorNoteIn';
+        anchorNoteIn.classList.add('anchor');
+        anchorNoteIn.insertAdjacentHTML('afterbegin', 'Click me for show Note!');
+        document.body.prepend(anchorNoteIn);
+
+        class Note {
+            constructor({anchor, position, html}) {
+                this.anchor = anchor;
+                this.position = position;
+                this.html = html;
+                this.anchor.onclick = () => this._onClick();
+            }
+
+            _positionAt() {
+                let anchorCoords = this.anchor.getBoundingClientRect();
+                this._note.style.position = 'fixed';
+                switch (this.position) {
+                    case 'top' :
+                        this._note.style.top = anchorCoords.top - this._note.offsetHeight + 'px';
+                        this._note.style.left = anchorCoords.left + 'px';
+                        break;
+                    case 'bottom' :
+                        this._note.style.top = anchorCoords.bottom + 'px';
+                        this._note.style.left = anchorCoords.left + 'px';
+                        break;
+                    case 'left' :
+                        this._note.style.top = anchorCoords.top + 'px';
+                        this._note.style.left = anchorCoords.left - this._note.offsetWidth + 'px';
+                        break;
+                    case 'right' :
+                        this._note.style.top = anchorCoords.top + 'px';
+                        this._note.style.left = anchorCoords.right + 'px';
+                        break;
+                    default :
+                        return new Error('the value of pos argument must be a "top", "bottom", "left" or "right"');
+                }
+            }
+
+            _show() {
+                this._note = document.createElement('div');
+                this._note.classList.add('note');
+                this._note.insertAdjacentHTML('afterbegin', this.html);
+                this.anchor.insertAdjacentElement('beforebegin', this._note);
+                this._positionAt();
+                this._delete();
+            }
+
+            _delete() {
+                setTimeout(() => this._note.remove(), 5000);
+            }
+
+            _onClick() {
+                this._show();
+            }
+        }
+
+        class NoteAbsolute extends Note {
+            _positionAt() {
+                super._positionAt();
+                this._note.style.position = 'absolute';
+            }
+        }
+
+        class NoteIn extends Note {
+            _positionAt() {
+                let anchorCoords = this.anchor.getBoundingClientRect();
+                this._note.style.position = 'absolute';
+                switch (this.position) {
+                    case 'top-out' :
+                        this._note.style.top = anchorCoords.top - this._note.offsetHeight + 'px';
+                        this._note.style.left = anchorCoords.left + 'px';
+                        break;
+                    case 'top-in' :
+                        this._note.style.top = anchorCoords.top + 'px';
+                        this._note.style.left = anchorCoords.left + 'px';
+                        break;
+                    case 'bottom-out' :
+                        this._note.style.top = anchorCoords.bottom + 'px';
+                        this._note.style.left = anchorCoords.left + 'px';
+                        break;
+                    case 'bottom-in' :
+                        this._note.style.top = anchorCoords.bottom - this._note.offsetHeight + 'px';
+                        this._note.style.left = anchorCoords.left + 'px';
+                        break;
+                    case 'left-out' :
+                        this._note.style.top = anchorCoords.top + 'px';
+                        this._note.style.left = anchorCoords.left - this._note.offsetWidth + 'px';
+                        break;
+                    case 'left-in' :
+                        this._note.style.top = anchorCoords.top + 'px';
+                        this._note.style.left = anchorCoords.left + 'px';
+                        break;
+                    case 'right-out' :
+                        this._note.style.top = anchorCoords.top + 'px';
+                        this._note.style.left = anchorCoords.right + 'px';
+                        break;
+                    case 'right-in' :
+                        this._note.style.top = anchorCoords.top + 'px';
+                        this._note.style.left = anchorCoords.right + this._note.offsetWidth + 'px';
+                        break;
+                    default :
+                        return new Error('the value of pos argument must be a "top", "bottom", "left" or "right"');
+                }
+            }
+        }
+
+        let note = new Note({
+            anchor: anchorNote,
+            position: 'top',
+            html: 'Hello! I\'m a your new Fixed Note'
+        });
+
+        let noteAbsolute = new NoteAbsolute({
+            anchor: anchorNoteAbsolute,
+            position: 'top',
+            html: 'Hello! I\'m a your new Absolute Note'
+        });
+
+        let noteIn = new NoteIn({
+            anchor: anchorNoteIn,
+            position: 'top-in',
+            html: 'Hello! I\'m a your new Note In'
+        });
+    </script>
+</body>
+</html>

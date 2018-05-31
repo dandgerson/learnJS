@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <button data-toggle-id="subscribe-mail">
+        Показать форму подписки
+    </button>
+    <br>
+
+    <form id="subscribe-mail" hidden>
+        Ваша почта: <input type="email">
+    </form>
+
+    <button data-toggle-id="subscribe-mail-2">
+        Показать форму подписки-2
+    </button>
+
+    <form id="subscribe-mail-2" hidden>
+        Ваша почта-2: <input type="email">
+    </form>
+
+    <script>
+        document.addEventListener('click', function(event) {
+            let target = event.target;
+
+            let id = target.dataset.toggleId;
+            if (!id) return;
+
+            let elem = this.getElementById(id);
+
+            elem.hidden = !elem.hidden;
+        });
+    </script>
+</body>
+</html>

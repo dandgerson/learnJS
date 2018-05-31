@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            background: lightgrey;
+        }
+        td select,
+        td input {
+            width: 150px;
+        }
+
+        label {
+            display: block;
+        }
+
+        .errorElement {
+            outline: 1px solid red;
+        }
+        .errorText {
+            color: red;
+        }
+        .successElement {
+            outline: 1px solid green;
+        }
+        .successText {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <form>
+        <table>
+            <tr>
+                <td>От кого</td>
+                <td>
+                    <input name="from" type="text">
+                </td>
+            </tr>
+            <tr>
+                <td>Ваш пароль</td>
+                <td>
+                    <input name="password" type="password">
+                </td>
+            </tr>
+            <tr>
+                <td>Повторите пароль</td>
+                <td>
+                    <input name="password2" type="password">
+                </td>
+            </tr>
+            <tr>
+                <td>Куда</td>
+                <td>
+                    <select name="to">
+                        <option></option>
+                        <option value="1">Отдел снабжения</option>
+                        <option value="2">Отдел разработки</option>
+                        <option value="3">Директору</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+
+        Сообщение:
+        <label>
+            <textarea name="message" style="display:block;width:400px;height:100px"></textarea>
+        </label>
+
+        <input type="button" name="check" value="Проверить">
+    </form>
+
+    <script>
+        class Validate {
+            constructor({form}) {
+                this.form = form;
+
+                this.form.addEventListener('click', event => {
+                    if (event.target.name === 'check') this.validate();
+                });
+            }
+
+            validate() {
+                this._reset();
+                this._validateFields({
+                    fields: [
+                        this.form.from, // первое проверяемое поле
+                        this.form.password,
+                        this.form.password2,
+                        this.form.to,
+                        this.form.message
+                    ],
+                    conditions: [
+                        this.form.from.value, // условие для проверки первого поля
+                        this.form.password.value,
+                        this.form.password2.value !== '' && this.form.password2.value === this.form.password.value,
+                        this.form.to.value,
+                        this.form.message.value
+                    ],
+                    errorTexts: [
+                        ' Не указано от кого.', // текст ошибки для первого поля
+                        ' Не указан пароль',
+                        ' Пароли не совпадают',
+                        ' Не указано куда',
+                        ' Отсутствует текст сообщения'
+                    ],
+                    successTexts: [
+                        ' Указано', // текст успешной проверки для первого поля
+                        ' Пароль указан',
+                        ' Пароли совпадают',
+                        ' Указано',
+                        ' Текст сообщения присутствует'
+                    ]
+                });
+
+                // this._validateFrom();
+                // this._validatePass();
+                // this._validateTo();
+                // this._validateMessage();
+            }
+
+            _validateFields({fields, conditions, errorTexts, successTexts}) {
+                let validate = [];
+                for (let i = 0; i < conditions.length; i++) {
+                    if (!conditions[i]) {
+                        fields[i].classList.add('errorElement');
+                        this._errorText(fields[i], errorTexts[i]);
+                        validate.push(false);
+                        continue;
+                    }
+                    fields[i].classList.add('successElement');
+                    this._successText(fields[i], successTexts[i]);
+                    validate.push(true);
+                }
+                validate.includes(false) ? this._errorText(this.form.check, ' Форма не готова к отправке.'):
+                    this._successText(this.form.check, ' Форма готова к отправке.');
+
+            }
+
+            _reset() {
+                let elements = this.form.elements;
+                for (let elem of elements) {
+                    if (elem.classList.contains('errorElement') || elem.classList.contains('successElement')) {
+                        elem.classList.remove('errorElement');
+                        elem.classList.remove('successElement');
+                    }
+
+                }
+                let texts = this.form.querySelectorAll('[data-error-text], [data-success-text]');
+                for (let text of texts) {
+                    text.remove();
+                    text = null;
+                }
+            };
+
+            _validateFrom() {
+                let from = this.form.elements.from;
+                if (!from.value) {
+                    from.classList.add('errorElement');
+                    this._errorText(from, ' Укажите от кого');
+                    return false;
+                }
+                from.classList.add('successElement');
+                this._successText(from, ' ok');
+                return true;
+            }
+
+            _validatePass(){
+                let pass = this.form.elements.password;
+                if (!pass.value) {
+                    pass.classList.add('errorElement');
+                    this._errorText(pass, ' Укажите пароль');
+                    return false;
+                }
+                if (pass.value !== this.form.password2.value) {
+                    pass.classList.add('errorElement');
+                    this._errorText(pass, ' Пароли не совпадают');
+                    return false;
+                }
+                return true;
+            }
+
+            _validateTo() {
+                let to = this.form.elements.to;
+                console.log(to);
+                if (!to.value) {
+                    to.classList.add('errorElement');
+                    this._errorText(to, '   Укажите куда.')
+                    return false
+                }
+                return true;
+            }
+
+            _validateMessage() {
+                let message = this.form.elements.message;
+                if (!message.value) {
+                    message.classList.add('errorElement');
+                    this._errorText(message, 'Отсутствует текст');
+                    return false;
+                }
+                return true;
+            }
+
+            _errorText(elem, text) {
+                let errorText = document.createElement('span');
+                errorText.setAttribute('data-error-text', text);
+                errorText.classList.add('errorText');
+                errorText.append(errorText.dataset.errorText);
+                elem.insertAdjacentElement('afterEnd', errorText);
+            }
+
+            _successText(elem, text) {
+                let successText = document.createElement('span');
+                successText.setAttribute('data-success-text', text);
+                successText.classList.add('successText');
+                successText.append(successText.dataset.successText);
+                elem.insertAdjacentElement('afterEnd', successText);
+            }
+
+        }
+        console.log(document.forms[0]);
+        let validate = new Validate({
+            form: document.forms[0]
+        });
+    </script>
+
+</body>
+</html>

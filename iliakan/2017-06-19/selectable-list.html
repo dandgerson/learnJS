@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>selectable-list</title>
+    <style>
+        body {
+            background: grey;
+            text-align: center;
+        }
+        .selectable-list {
+            list-style-type: none;
+            display: inline-block;
+            margin: 0;
+            margin-top: 15%;
+            padding: 15px;
+            background: lightyellow;
+            border: 2px solid black;
+        }
+        .selected-item {
+            background: lightpink;;
+        }
+
+        .special-select {
+            background: lightgreen;
+        }
+    </style>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js"></script>
+
+<script>
+        class SelectableList {
+            constructor({template, items,}) {
+                this.template = template({list: items});
+            }
+
+            getElem() {
+                if(!this._elem) this._render();
+                return this._elem;
+            }
+
+            _render() {
+                this._elem = document.createElement('div');
+                this._elem.insertAdjacentHTML('afterBegin', this.template);
+                this._elem = this._elem.firstElementChild;
+
+                this._elem.addEventListener('click', this._onClick);
+            }
+
+            _onClick(event) {
+                let target = event.target;
+                if (target.tagName === 'UL') {
+                    deselectAll();
+                    return;
+                }
+
+                if ( (event.ctrlKey || event.metaKey) && !(event.shiftKey || event.altKey)) {
+                    specialSelect();
+                } else if (event.shiftKey && !(event.ctrlKey || event.metaKey || event.altKey)) {
+                    shiftSelect();
+                } else {
+                    deselectAll();
+                    selectItem();
+                }
+
+                function selectItem() {
+                    target.classList.toggle('selected-item');
+                }
+
+                function specialSelect() {
+                    target.classList.toggle('special-select');
+                }
+
+                function shiftSelect() {
+                    selectItem();
+                    let lis = target.parentNode.children;
+                    let selectedLis = [];
+                    for (let i = 0; i < lis.length; i++) {
+                        if (lis[i].classList.contains('selected-item')) {
+                            selectedLis.push(i);
+                        }
+                    }
+                    for (let i = selectedLis[0] + 1; i < selectedLis[1]; i++) {
+                        lis[i].classList.add('selected-item');
+                    }
+                }
+
+                function deselectAll() {
+                    let lis = null;
+                    if (target.tagName === 'LI')
+                        lis = target.parentNode.children;
+                    if (target.tagName === 'UL')
+                        lis = target.children;
+
+                    for (let li of lis) {
+                        if (li.classList.contains('special-select'))
+                            li.classList.remove('special-select');
+                        if (li.classList.contains('selected-item'))
+                            li.classList.remove('selected-item');
+
+                    }
+
+                }
+            }
+        }
+
+        let template = '<ul class="selectable-list">\n' +
+            '            <% for (item of list) { %>\n' +
+            '            <li><%=item%></li>\n' +
+            '            <% } %>\n' +
+            '        </ul>';
+
+        let selectableList = new SelectableList({
+            template: _.template(template),
+            items: [
+                'first item',
+                'second item',
+                'third item',
+                'fourth item',
+                'fifth item',
+                'sixth item',
+                'seventh item',
+                'eighth item',
+                'ninth item',
+                'tenth item'
+            ]
+        });
+
+    document.body.insertAdjacentElement('afterBegin', selectableList.getElem());
+    </script>
+</body>
+</html>

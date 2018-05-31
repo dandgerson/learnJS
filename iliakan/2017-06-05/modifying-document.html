@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>modifying-document</title>
+    <style>
+        .featured {
+            border: 2px solid black;
+            min-height: 100px;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .featured ul {
+            text-align: left;
+        }
+
+        .featured1 {
+            background-color: lightpink;
+        }
+
+        .featured2 {
+            background-color: lightgreen;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        let body = document.body;
+        body.style.backgroundColor = 'grey';
+
+        let h1 = document.createElement('h1');
+        h1.innerHTML = 'Modifying Document';
+        body.insertBefore(h1, body.firstChild);
+
+        let div = document.createElement('div');
+        div.classList.add('featured', 'featured1');
+        div.innerHTML = '<h3><b>I\'m a featured DIV</b></h3>';
+        body.insertBefore(div, body.lastChild);
+
+        let divClone = div.cloneNode(true);
+        divClone.classList.remove('featured1');
+        divClone.classList.add('featured2');
+        divClone.innerHTML = '<h3><b>I\'m a featured divClone</b></h3>';
+        div.parentElement.insertBefore(divClone, div.nextElementSibling);
+
+        // Remove elements polyfill
+        if (!Element.prototype.remove) {
+            Element.prototype.remove = function remove() {
+                if (this.parentNode) {
+                    this.parentNode.removeChild(this);
+                }
+            };
+        }
+        // insertAfter
+        function insertAfter(elem, refElem) {
+            let parent = refElem.parentNode;
+            let next = refElem.nextSibling;
+            if (next) {
+                return parent.insertBefore(elem, next);
+            } else {
+                return parent.appendChild(elem);
+            }
+        }
+        // removeChildren
+        if (!Element.prototype.removeChildren) {
+            Object.defineProperty(Element.prototype, 'removeChildren', {
+                get: function () {
+                    while (this.firstChild) {
+                        this.removeChild(this.firstChild);
+                    }
+                }
+            })
+        }
+        // create a list
+        function createUList() {
+            function createLi() {
+                return document.createElement('li');
+            }
+
+            function getListItem() {
+                return prompt('inter list item: ', '');
+            }
+
+            let ul = document.createElement('ul');
+
+            do {
+                var listItem = getListItem();
+                if (listItem !== null) {
+                    let li = createLi();
+                    li.textContent = listItem;
+                    ul.appendChild(li);
+                }
+            } while (listItem);
+            return ul;
+        }
+        // create tree
+        let data = {
+            "Рыбы" : {
+                "Форель" : {},
+                "Щука" : {}
+            },
+            "Деревья" : {
+                "Хвойные" : {
+                    "Лиственница" : {},
+                    "Ель" : {}
+                },
+                "Цветковые" : {
+                    "Берёза" : {},
+                    "Тополь" : {}
+                }
+            }
+        };
+
+
+        function createUl() {
+            return document.createElement('ul');
+        }
+
+        function createLi() {
+            return document.createElement('li');
+        }
+
+
+        let container = document.createElement('div');
+
+
+        // function createTree(container, data) {
+        //     let ul = createUl();
+        //     container.appendChild(ul);
+        //     for(let p in data) {
+        //         let li = createLi();
+        //         li.innerHTML = p;
+        //         ul.appendChild(li);
+        //         for(let r in data[p]) {
+        //             let ul1 = createUl();
+        //             ul.lastElementChild.appendChild(ul1);
+        //             li = createLi();
+        //             li.innerHTML = r;
+        //             ul1.appendChild(li);
+        //             for(let s in data[p][r]) {
+        //                 let ul2 = createUl();
+        //                 ul1.lastElementChild.appendChild(ul2);
+        //                 li = createLi();
+        //                 li.innerHTML = s;
+        //                 ul2.appendChild(li);
+        //             }
+        //         }
+        //     }
+        // }
+
+        function createTree(parent, obj) {
+            if (Object.keys(obj).length > 0) {
+                let ul = document.createElement('ul');
+                parent.append(ul);
+                for (let key in obj) {
+                    let li = document.createElement('li');
+                    li.innerHTML = key;
+                    ul.append(li);
+                    createTree(li, obj[key]);
+                }
+            }
+        }
+
+
+
+        // createCalendar
+        function createCalendar(id, year, month) {
+            let elem = document.getElementById(id);
+             let mon = month - 1;
+             let d = new Date(year, mon);
+
+             let table = '<table><tr><th>пн</th><th>вт</th><th>ср</th><th>пт</th><th>сб</th><th>вс</th></tr><tr>';
+             for (let i = 0; i < getDay(d); i++) {
+                 table += '<td></td>';
+             }
+
+             while (d.getMonth() === mon) {
+                 table += '<td>' + d.getDate() + '</td>>';
+
+                 if (getDay(d) % 7 === 6) {
+                     table += '</tr><tr>';
+                 }
+
+                 d.setDate(d.getDate() + 1);
+             }
+
+             if (getDay(d) !== 0) {
+                 for (let i = getDay(d); i < 7; i++) {
+                     table += '<td></td>';
+                 }
+             }
+
+             table += '</tr></table>';
+
+             elem.innerHTML = table;
+        }
+
+        function getDay(date) {
+            let day = date.getDay();
+            if (day === 0) day = 7;
+            return day - 1;
+        }
+    </script>
+</body>
+
+</html>

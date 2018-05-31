@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            background: lightgray;
+        }
+    </style>
+</head>
+<body>
+
+
+<!-- third instance -->
+<!--<form id="form">-->
+    <!--<p>Name: <input type="text" name="fullName" required></p>-->
+    <!--<p>Email: <input type="email" name="email" required></p>-->
+    <!--<p>Birthdate: <input type="text" name="birthdate"></p>-->
+    <!--<input type="submit">-->
+<!--</form>-->
+
+<!-- forth instance -->
+
+<button type="button" id="button">Get users</button>
+
+<script>
+
+    // first instance
+
+    //     let xhr = new XMLHttpRequest();
+    //     xhr.open('POST', 'http://test-api.javascript.ru/v1/dandgerson/users');
+    //     xhr.setRequestHeader('Content-Type', 'application/json');
+    //     xhr.send(JSON.stringify({
+    //         fullName: 'Dmitry',
+    //         email: 'dandgerson@gmail.com'
+    //     }));
+    //
+    //     xhr.onload = () => {
+    //         if (xhr.status !== 200)
+    //             alert('Error: ' + xhr.responseText);
+    //         alert('Ok');
+    //         console.log(xhr.responseText);
+    //     };
+    //
+    //     xhr.onerror = () => {
+    //         alert('Sorry error! Try again later');
+    //     }
+
+    // second instance
+
+    // let xhr = new XMLHttpRequest();
+    // xhr.open('PATCH', 'http://test-api.javascript.ru/v1/dandgerson/users/5ae31b887f0d1fac2ba88cdc');
+    // xhr.setRequestHeader('Content-Type', 'application/json');
+    // xhr.send(JSON.stringify({
+    //     fullName: 'Dima'
+    // }));
+    //
+    // xhr.onload = () => {
+    //     if (xhr.status !== 200)
+    //         alert('Error: ' + xhr.responseText);
+    //     alert('Ok');
+    //     console.log(xhr.responseText);
+    // };
+    //
+    // xhr.onerror = () => {
+    //     alert('Sorry error! Try again later');
+    // }
+
+    //third instance
+
+    // let form = document.getElementById('form');
+    //
+    // form.onsubmit = event => {
+    //     event.preventDefault();
+    //
+    //     let fullName = form.fullName.value;
+    //     let email = form.email.value;
+    //     let birthdate = form.birthdate.value;
+    //
+    //     console.log(fullName);
+    //     console.log(email);
+    //
+    //     let xhr = new XMLHttpRequest();
+    //     xhr.open('POST', 'http://test-api.javascript.ru/v1/dandgerson/users');
+    //     xhr.setRequestHeader('Content-Type', 'application/json');
+    //     xhr.send(JSON.stringify({
+    //         fullName: fullName,
+    //         email: email,
+    //         birthdate: birthdate
+    //     }));
+    //
+    //     xhr.onload = () => {
+    //         if (xhr.status !== 200)
+    //             alert('Error: ' + xhr.responseText);
+    //         alert('Ok');
+    //         console.log(xhr.responseText);
+    //     };
+    //
+    //     xhr.onerror = () => {
+    //         alert('Sorry error! Try again later');
+    //     }
+    // }
+
+    // forth instance
+
+    let button = document.getElementById('button');
+    button.addEventListener('click', event => {
+        event.preventDefault();
+        let list = document.createElement('ul');
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://test-api.javascript.ru/v1/dandgerson/users');
+        xhr.send();
+
+        xhr.onload = () => {
+            if (xhr.status !== 200)
+                alert('Error: ' + xhr.responseText);
+            console.log('Ok');
+            console.log(xhr.responseText);
+            let users = JSON.parse(xhr.responseText);
+            console.log(users);
+            for(let user of users) {
+                let li = document.createElement('li');
+                for (let prop in user) {
+                    li.append(`${prop} : ${user[prop]},`, document.createElement('br'));
+                }
+                list.append(li);
+            }
+            button.insertAdjacentElement('afterEnd', list);
+        };
+
+        xhr.onerror = () => {
+            alert('Sorry error! Try again later');
+        }
+    })
+</script>
+</body>
+</html>

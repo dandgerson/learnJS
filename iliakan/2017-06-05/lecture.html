@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Learn Javascript</title>
+	
+	<!-- Custom CSS -->
+	<style>
+		body {
+			background-color: grey;
+		}
+
+		body h1 {
+			text-decoration: underline;
+		}
+
+		.clock .hour {
+			color: green;
+		}
+
+		.clock .min {
+			color: blue;
+		}
+
+		.clock .sec {
+			color: red;
+		}
+	</style>
+	
+</head>
+
+<body>
+	<!-- Code there -->
+	<h1>Learn EcmaScript 2018</h1>
+
+    <!-- Toggler Button -->
+	<button id="button" class="toggler">Click me to toggle text!</button>
+	<div id="info">Bla bla bla</div>
+
+    <!-- Clock -->
+    <div id="clock" class="clock">
+        <span class="hour">00</span>:<span class="min">00</span>:<span class="sec">00</span>
+        <button id="start" onclick="clock.start()">Start</button>
+        <button id="stop" onclick="clock.stop()">Stop</button>
+        <button onclick="alert('Часы должны останавливаться, во время вывода этого сообщени')">Часы должны останавливаться, во время вывода этого сообщени</button>
+    </div>
+
+
+
+	<!-- Custom JS -->
+	<script>
+
+        // toggler Button
+        class Toggler {
+            constructor({elem, target}) {
+                this.elem = elem;
+                this.target = target;
+                elem.onclick = () => this.onClick();
+            }
+
+            onClick() {
+                this.toggle();
+                }
+
+            toggle() {
+                this.target.hidden = !this.target.hidden;
+            }
+        }
+
+        let toggler = new Toggler({
+            elem : document.getElementById('button'),
+            target : document.getElementById('info')
+        });
+
+
+        // Clock
+        class Clock {
+            constructor({elem}) {
+                this.elem = elem;
+            }
+
+            start() {
+                this.tick();
+                this._timerId = setInterval(() => this.tick(), 1000);
+            }
+
+            tick() {
+                let date = new Date();
+                this.elem.querySelector('.hour').innerHTML = ('0' + date.getHours()).slice(-2);
+                this.elem.querySelector('.min').innerHTML = ('0' + date.getMinutes()).slice(-2);
+                this.elem.querySelector('.sec').innerHTML = ('0' + date.getSeconds()).slice(-2);
+            }
+
+            stop() {
+                clearInterval(this._timerId);
+            }
+        }
+
+        let clock = new Clock({
+            elem : document.getElementById('clock')
+        });
+	</script>
+</body>
+</html>

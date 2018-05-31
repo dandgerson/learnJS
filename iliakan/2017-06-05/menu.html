@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+</head>
+<style>
+    .menu ul {
+        margin: 0;
+        list-style: none;
+        padding-left: 20px;
+        display: none;
+    }
+
+    .menu .title:hover {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .menu .title:before {
+        content: '▶ ';
+        font-size: 80%;
+        color: green;
+    }
+
+    .menu.open .title:before {
+        content: '▼ ';
+    }
+
+    .menu.open ul {
+        display: block;
+    }
+</style>
+<body>
+
+<div id="sweeties" class="menu">
+    <span class="title">Сладости (нажми меня)!</span>
+    <ul>
+        <li>Пирог</li>
+        <li>Пончик</li>
+        <li>Мед</li>
+    </ul>
+</div>
+
+<script>
+    class menuToggler {
+        constructor({elem, target}) {
+            this.elem = elem;
+            this.target = target;
+            target.onclick = () => this._onClick();
+        }
+
+        _onClick() {
+            this.elem.classList.toggle('open');
+        }
+    }
+
+    new menuToggler({
+        elem: document.querySelector('.menu'),
+        target: document.querySelector('.title')
+    });
+</script>
+</body>
+
+</html>

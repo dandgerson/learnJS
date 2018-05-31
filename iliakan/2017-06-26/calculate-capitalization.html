@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>calculate-capitalization</title>
+    <style>
+        body {
+            background: lightgrey;
+        }
+        td select,
+        td input {
+            width: 150px;
+        }
+
+        [data-id='diagram'] th {
+            /* border: 1px solid black; */
+        }
+
+        [data-id='diagram'] td {
+            vertical-align: bottom;
+            text-align: center;
+            padding: 10px;
+        }
+
+        [data-id='diagram'] div {
+            transition: all 1.5s;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<h2>Калькулятор процентов по вкладам.</h2>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js"></script>
+    <script type="text/template" id="template">
+        <form name="calculator">
+            <table>
+                <tr>
+                    <td>Ставка % годовых</td>
+                    <td>
+                        <input name="rate" type="text" value="10">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Cтартовый взнос</td>
+                    <td>
+                        <input name="money" type="text" value="10000">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Количество месяцев</td>
+                    <td>
+                        <select name="months">
+                            <option value="3" selected>3 месяца</option>
+                            <option value="6" selected>6 месяцев</option>
+                            <option value="12" selected>12 месяцев (1 год)</option>
+                            <option value="24">24 месяца (2 года)</option>
+                            <option value="36">36 месяцев (3 года)</option>
+                            <option value="60">60 месяцев (5 лет)</option>
+                            <option value="84">84 месяца (7 лет)</option>
+                            <option value="120">120 месяцев (10 лет)</option>
+                            <option value="180">180 месяцев (15 лет)</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>С капитализацией</td>
+                    <td>
+                        <input name="capitalization" type="checkbox" checked>
+                    </td>
+                </tr>
+                <tr data-id="period">
+                    <td>Период капитализации<br>(в месяцах)</td>
+                    <td>
+                        <input name="period" type="text" value="1">
+                    </td>
+                </tr>
+                <tr data-id="adds">
+                    <td>С пополнением</td>
+                    <td>
+                        <input name="adds" type="checkbox" checked>
+                    </td>
+                </tr>
+                <tr data-id="adds-money">
+                    <td>Периодное пополнение</td>
+                    <td>
+                        <input name="adds-money" type="text" value="1000">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+
+        <table data-id="diagram">
+            <tr>
+                <th>Было:</th>
+                <th>Станет:</th>
+                
+                <th data-id="result-totalInvests"></th>
+                <th data-id="result-profit"></th>
+            </tr>
+            <tr>
+                <th data-id="money-before"></th>
+                <th data-id="money-after"></th>
+                
+                <td data-id="result-totalInvests-value"></td>
+                <td data-id="result-profit-value"></td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="background: red;width:40px;height:100px" data-id="height-before"></div>
+                </td>
+                <td>
+                    <div style="background: green;width:40px;height:1px" data-id="height-after"></div>
+                </td>
+                <td data-id="result-totalInvests-diagram">
+                    <div style="background: orange;width:40px;height:0" data-id="result-totalInvests-height"></div>
+                </td>
+                <td>
+                    <div style="background: blue;width:40px;height:0" data-id="result-profit-height"></div>
+                </td>
+            </tr>
+        </table>
+        <input type="button" name="button" value="Рассчитать">
+    </script>
+
+    <script>
+
+        class DepositeCalculator {
+            constructor({template, fixed}) {
+                this.template = template();
+                this.fixed = fixed;
+
+                this.result = {};
+            }
+
+            getElem() {
+                if (!this._elem) this._render();
+                return this._elem;
+            }
+
+            _render() {
+                this._elem = document.createElement('div');
+                this._elem.insertAdjacentHTML('afterBegin', this.template);
+
+                this._elem.querySelector('[data-id="adds-money"]').hidden = false;
+                this._elem.querySelector('[data-id="adds"]').hidden = false;
+                this._elem.querySelector('[data-id="period"]').hidden = false;
+
+                this._elem.querySelector('[name="calculator"]').addEventListener('change', () => {
+                    this.calculate();
+                });
+                this._elem.querySelector('[name="button"]').addEventListener('click', () => {
+                    this.calculate();
+                });
+            }
+
+            calculate() {
+                let rate = +this._elem.querySelector('[name="rate"]').value / 100;
+                let invests = +this._elem.querySelector('[name="money"]').value;
+                let adds = this._elem.querySelector('[name="adds"]').checked;
+                let addsMoney = +this._elem.querySelector('[name="adds-money"]').value;
+                let months = +this._elem.querySelector('[name="months"]').value;
+                let period = +this._elem.querySelector('[name="period"]').value;
+                let capitalization = this._elem.querySelector('[name="capitalization"]').checked;
+
+                let self = this;
+
+                this._elem.querySelector('[data-id="period"]').hidden = !capitalization;
+                this._elem.querySelector('[data-id="adds"]').hidden = !capitalization;
+                this._elem.querySelector('[data-id="adds-money"]').hidden = !adds || !capitalization;
+
+
+                if (capitalization && adds) {
+                    _getAddCapitalize();
+                } else if (capitalization && !adds) {
+                    _getCapitalize();
+                } else {
+                    _getLinear();
+                }
+                
+                _renderDiagram();
+
+                function _getLinear() {
+                    self.result.sum = +(
+                        invests * (1 + rate * months / 12)
+                    ).toFixed(self.fixed);
+                    self.result.profit = +(self.result.sum - invests).toFixed(self.fixed);
+                    self.result.yields = self.result.profit / invests;
+                }
+
+                function _getCapitalize() {
+                    self.result.sum = +(
+                        invests * Math.pow(1 + rate / (12 / period), (12 / period) * (months / 12))
+                    ).toFixed(self.fixed);
+                    self.result.profit = +(
+                        self.result.sum - invests
+                    ).toFixed(self.fixed);
+                    self.result.yields = self.result.profit / invests;
+                }
+
+                function _getAddCapitalize () {
+                    self.result.sum = +(
+                        (addsMoney * (12 / period) * (months / 12)) * (Math.pow(1 + rate / (12 / period), (12 / period) * (months / 12))) +
+                        invests * Math.pow(1 + rate / (12 / period), (12 / period) * (months / 12))
+                    ).toFixed(self.fixed);
+                    self.result.sumAdds = +(addsMoney * months / period);
+                    self.result.totalInvests = +self.result.sumAdds + invests;
+                    self.result.profit = +(
+                        self.result.sum - self.result.totalInvests
+                    ).toFixed(self.fixed);
+                    self.result.yields = +(
+                        self.result.profit / self.result.totalInvests * 100
+                    ).toFixed(self.fixed);
+                }
+
+                function _renderDiagram() {
+                    self._elem.querySelector('[data-id="money-before"]').innerHTML = invests;
+                    self._elem.querySelector('[data-id="money-after"]').innerHTML = self.result.sum;
+
+                    self._elem.querySelector('[data-id="result-profit"]').innerHTML = 'Доход:';
+                    self._elem.querySelector('[data-id="result-profit-value"]').innerHTML = self.result.profit;
+                    
+                    self._elem.querySelector('[data-id="result-totalInvests"]').innerHTML = 'Общая сумма<br>вклада:';
+                    self._elem.querySelector('[data-id="result-totalInvests-value"]').innerHTML = self.result.totalInvests;
+                    
+                    self._elem.querySelector('[data-id="result-totalInvests"]').hidden = !adds || !capitalization;
+                    self._elem.querySelector('[data-id="result-totalInvests-value"]').hidden = !adds || !capitalization;
+                    self._elem.querySelector('[data-id="result-totalInvests-diagram"]').hidden = !adds || !capitalization;
+
+                    self._elem.querySelector('[data-id="height-before"]').style.height = invests / self.result.sum * 100 + 'px';
+                    self._elem.querySelector('[data-id="height-after"]').style.height = 100 + 'px';
+                    self._elem.querySelector('[data-id="result-totalInvests-height"]').style.height = (self.result.sumAdds + invests) / self.result.sum * 100 + 'px';
+                    self._elem.querySelector('[data-id="result-profit-height"]').style.height = (self.result.profit) / self.result.sum * 100 + 'px';
+                }
+            }
+        }
+
+        let template = 'document.querySelector('#template').innerHTML';
+        let h2 = document.getElementsByTagName('h2');
+        
+        let depositeCalc = new DepositeCalculator({
+            template: _.template(template),
+            fixed: 2
+        });
+
+        h2[0].insertAdjacentElement('afterEnd', depositeCalc.getElem());
+
+        // function calc (invests, rate, time, capitalization) {
+
+        //     let args = [...arguments].slice(0, arguments.length - 1);
+        //     return (capitalization) ?  getCapitalize(...args) : getLinear(...args);
+
+        //     function getLinear(invests, rate, time) {
+        //         let sum, profit, yields = null;
+        //         let fixed = 2;
+        //         sum = +(invests * (1 + rate * time)).toFixed(fixed);
+        //         profit = +(sum - invests).toFixed(fixed);
+        //         yields = profit / invests;
+        //         return {
+        //             sum: sum,
+        //             profit: profit,
+        //             yields: yields
+        //         };
+        //     }
+
+        //     function getCapitalize(invests, rate, time) {
+        //         let sum, profit, yields = null;
+        //         let fixed = 2;
+        //         sum = +(invests * Math.pow((1 + rate), time)).toFixed(fixed);
+        //         profit = +(sum - invests).toFixed(fixed);
+        //         yields = profit / invests;
+        //         return {
+        //             sum: sum,
+        //             profit: profit,
+        //             yields: yields
+        //         };
+        //     }
+        // }
+
+        // let cap = true;
+        // let investCap = calc(50000, 20/100/1, 1*15, cap);
+        // let investLin = calc(50000, 20/100/1, 1*15, false);
+
+        // // getAddCap - расчёт процентов с капитализацией с ежемесячным пополнением депозита
+        
+        // // invests - стартовый взнос
+        // // rate - процентная ставка в год
+        // // years - количество лет
+        // // period - количество периодов начисления сложных процентов за год
+        // // adds - ежемесячное пополнение депозита
+        
+        // // result - итоговая сумма
+        // // sumAdds - сумма ежемесячных пополнений за весь период накопления
+        // // totalInvests - итоговое вложение
+        // // profit - итоговая прибыль
+        // // yields - процент эффективности накопления
+
+        // function getAddCap ({invests, rate, years , period, adds}) {
+        //     let sum = null;
+        //     let fixed = 2;
+        //     result = +(
+        //         adds * period / rate * (Math.pow(1 + rate / period, (period * years)) - 1) +
+        //         invests * Math.pow(1 + rate / period, (period * years))
+        //     ).toFixed(fixed);
+        //     let sumAdds = adds * period * years;
+        //     let totalInvests = sumAdds + invests;
+        //     let profit = +(result - totalInvests).toFixed(fixed);
+        //     let yields = +(profit / totalInvests * 100).toFixed(fixed);
+        //     return {
+        //         result: result,
+        //         sumAdds: sumAdds,
+        //         totalInvests: totalInvests,
+        //         profit: profit,
+        //         yields: yields
+        //     }
+        // }
+
+        // let addCap = getAddCap({
+        //     invests: 6000,
+        //     rate: 10/100,
+        //     years: 5,
+        //     period: 12,
+        //     adds: 12000
+        // });
+        // console.log(addCap);
+
+
+    </script>
+</body>
+</html>

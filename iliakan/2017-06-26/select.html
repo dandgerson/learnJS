@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>select</title>
+    <style>
+        body {
+            background: grey;
+        }
+    </style>
+</head>
+<body>
+    <select>
+        <option value="Rock">Рок</option>
+        <option value="Blues" selected>Блюз</option>
+    </select>
+
+    <script>
+        let select = document.querySelector('select');
+        let option = new Option('Классика', 'Classic', true, true);
+        console.log(option);
+        select.append(option);
+    </script>
+</body>
+</html>

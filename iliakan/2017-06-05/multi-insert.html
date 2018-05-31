@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            background-color: grey;
+        }
+        td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <li>1</li>
+        <li>2</li>
+    </ul>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Отчество</th>
+                <th>Возраст</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Alex</td>
+                <td></td>
+                <td></td>
+                <td>10</td>
+            </tr>
+            <tr>
+                <td>Jack</td>
+                <td></td>
+                <td></td>
+                <td>25</td>
+            </tr>
+            <tr>
+                <td>John</td>
+                <td></td>
+                <td></td>
+                <td>19</td>
+            </tr>
+            <tr>
+                <td>Fillip</td>
+                <td></td>
+                <td></td>
+                <td>15</td>
+            </tr>
+            <tr>
+                <td>Fill</td>
+                <td></td>
+                <td></td>
+                <td>5</td>
+            </tr>
+        </tbody>
+    </table>
+    <script>
+        let ul = document.querySelector('ul');
+        ul.lastElementChild.insertAdjacentHTML('afterEnd', '<li>3</li><li>4</li><li>5</li>');
+
+        let table = document.querySelector('table');
+        let rows = [];
+        let tableRowsLength = table.rows.length;
+        for (let i = 1; i < tableRowsLength; i++) {
+            rows.push(table.rows[table.rows.length - 1]);
+            table.rows[table.rows.length - 1].remove();
+        }
+        rows.sort(
+            (a, b) => {return (a.firstElementChild.innerHTML > b.firstElementChild.innerHTML) ? 1 : -1;}
+        );
+        for (let i = 0; i < rows.length; i++) {
+            table.tBodies[0].append(rows[i]);
+        }
+    </script>
+</body>
+</html>

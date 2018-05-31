@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sorting Visualization</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    #bubbleSort, #insertSort {
+        position: relative;
+        height: 200px;
+    }
+</style>
+<body>
+    <section id="bubbleSort">
+        <h2>Bubble Sort</h2>
+        <form class="interface" name="bubbleSortInterface">
+            <input type="button" id="bubbleSortGenerate" value="generate Array">
+            <input type="button" id="bubbleSortSort" value="sort Array">
+            <hr>
+            <input type="button" id="bubbleSortReset" class="warning" value="reset">
+            <input type="button" id="bubbleSortHardReset" class="dblwarning" value="hard reset">
+        </form>
+
+        <div class="content-box">
+            <b>Statistics:</b>
+            <ul>
+                <li>loops: <span id="bubbleSortLoops"></span></li>
+                <li>swaps: <span id="bubbleSortSwaps"></span></li>
+                <li>time: <span id="bubbleSortTime"></span></li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="insertSort">
+        <h2>Insert Sort</h2>
+        <form class="interface" name="insertSortInterface">
+            <input type="button" id="insertSortGenerate" value="generate Array">
+            <input type="button" id="insertSortSort" value="sort Array">
+            <hr>
+            <input type="button" id="insertSortReset" class="warning" value="reset">
+            <input type="button" id="insertSortHardReset" class="dblwarning" value="hard reset">
+        </form>
+
+        <div class="content-box">
+            <b>Statistics:</b>
+            <ul>
+                <li>loops: <span id="insertSortLoops"></span></li>
+                <li>swaps: <span id="insertSortSwaps"></span></li>
+                <li>time: <span id="insertSortTime"></span></li>
+            </ul>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js"></script>
+    <script src="sortingClasses.js"></script>
+    <script>
+        let template = '<% for (let i = 0; i < data.length; i++) { %>\n' +
+            '            <div class="item" data-id="<%=data[i] %>"><%=data[i] %></div>\n' +
+            '        <% } %>';
+        let unsortData = ['1', '0', '3', '2', '5', '4', '7', '6', '9', '8',
+            '11', '10', '19', '14', '12', '16', '15', '18', '17'];
+
+        let bubbleSort = new BubbleSort({
+            template: _.template(template),
+            data: unsortData
+        });
+
+        document.forms.bubbleSortInterface.addEventListener('click', (event) => {
+            if (event.target.id === 'bubbleSortGenerate')
+                event.target.parentNode.insertAdjacentElement('afterEnd', bubbleSort.getElem());
+            if (event.target.id === 'bubbleSortSort') {
+                bubbleSort.sort();
+                document.getElementById('bubbleSortLoops').innerHTML = ' ' + bubbleSort.getStatistics().loops;
+                document.getElementById('bubbleSortSwaps').innerHTML = ' ' + bubbleSort.getStatistics().swaps;
+                document.getElementById('bubbleSortTime').innerHTML = ' ' + bubbleSort.getStatistics().time + ' ms';
+            }
+            if (event.target.id === 'bubbleSortReset') {
+                bubbleSort.reset();
+                document.getElementById('bubbleSortLoops').innerHTML = ' ' + 0;
+                document.getElementById('bubbleSortSwaps').innerHTML = ' ' + 0;
+                document.getElementById('bubbleSortTime').innerHTML = ' ' + 0;
+            }
+            if (event.target.id === 'bubbleSortHardReset') {
+                bubbleSort.hardReset();
+                document.getElementById('bubbleSortLoops').innerHTML = '';
+                document.getElementById('bubbleSortSwaps').innerHTML = '';
+                document.getElementById('bubbleSortTime').innerHTML = '';
+            }
+        });
+
+        let insertSort = new InsertSort({
+            template: _.template(template),
+            data: unsortData
+        });
+
+        document.forms.insertSortInterface.addEventListener('click', (event) => {
+            if (event.target.id === 'insertSortGenerate')
+                event.target.parentNode.insertAdjacentElement('afterEnd', insertSort.getElem());
+            if (event.target.id === 'insertSortSort') {
+                insertSort.sort();
+                document.getElementById('insertSortLoops').innerHTML = ' ' + insertSort.getStatistics().loops;
+                document.getElementById('insertSortSwaps').innerHTML = ' ' + insertSort.getStatistics().swaps;
+                document.getElementById('insertSortTime').innerHTML = ' ' + insertSort.getStatistics().time + ' ms';
+            }
+            if (event.target.id === 'insertSortReset') {
+                insertSort.reset();
+                document.getElementById('insertSortLoops').innerHTML = ' ' + 0;
+                document.getElementById('insertSortSwaps').innerHTML = ' ' + 0;
+                document.getElementById('insertSortTime').innerHTML = ' ' + 0;
+            }
+            if (event.target.id === 'insertSortHardReset') {
+                insertSort.hardReset();
+                document.getElementById('insertSortLoops').innerHTML = '';
+                document.getElementById('insertSortSwaps').innerHTML = '';
+                document.getElementById('insertSortTime').innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>

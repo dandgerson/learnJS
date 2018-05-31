@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HotKeys</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            background: lightgrey;
+        }
+        body *{
+            background: lightgrey;
+        }
+        body > div {
+            width: 50%;
+        }
+        .edit-box {
+            position: absolute;
+            width: 250px;
+            height: 150px;
+            outline: 1px solid rebeccapurple;
+            background: lightblue;
+        }
+
+        .edit-box_item-pos-1 {
+            left: 100px;
+            top: 90px;
+        }
+
+        .edit-box_item-pos-2 {
+            left: 100px;
+            top: 290px;
+        }
+
+        .edit-box_item-pos-3 {
+            left: 100px;
+            top: 490px;
+        }
+
+        [data-id="textarea"] {
+            background: lightgreen;
+        }
+
+        .selected {
+            border: 2px solid blueviolet;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <span>focus on EditBox</span><br>
+    <span>push "Ctrl"/"Meta" + "E" to edit EditBox</span><br>
+    <span>push "Ctrl"/"Meta" + "S" to save EditBox</span><br>
+    <span>push "Escape" to live EditBox without save</span>
+
+</div>
+    <div class="edit-box edit-box_item-pos-1" data-editbox="true" tabindex="1">
+        Lorem ipsum dolor 1.
+    </div>
+
+    <div class="edit-box edit-box_item-pos-2" data-editbox="true" tabindex="2">
+        Lorem ipsum dolor 2.
+    </div>
+    <div class="edit-box edit-box_item-pos-3" data-editbox="true" tabindex="3">
+        Lorem ipsum dolor 3.
+    </div>
+
+    <script>
+
+        class EditBox {
+            constructor({dataAttr}) {
+                document.addEventListener('focus', event => {
+                    if (!event.target.dataset[dataAttr]) return;
+                    this._boxFocus()
+                }, true);
+                document.addEventListener('blur', event => {
+                    if (!event.target.dataset[dataAttr]) return;
+                    this._boxBlur()
+                }, true);
+                document.addEventListener('keydown', event => {
+                    if (!event.target.dataset[dataAttr]) return;
+                    this._keyListener()
+                }, true);
+            }
+            _boxFocus() {
+                console.log('_boxFocus');
+                event.target.classList.add('selected');
+            }
+            _boxBlur() {
+                console.log('_boxBlur');
+                event.target.classList.remove('selected');
+            }
+            _keyListener() {
+                console.log('_keyListener');
+                event.preventDefault();
+                if (event.code === 'KeyE' && (event.ctrlKey || event.metaKey)) {
+                    this._renderTextarea();
+                    this._edit();
+                }
+                if (event.code === 'Tab' || (event.code === 'Tab' && event.shiftKey)) {
+                    event.target.blur();
+                }
+
+            }
+            _renderTextarea() {
+                this.box = event.target;
+                console.log('_renderTextarea');
+                console.log(event.target);
+                let boxCoord = this.box.getBoundingClientRect();
+                this.textarea = document.createElement('textarea');
+                this.textarea.style.position = 'absolute';
+                this.textarea.style.top = boxCoord.top + pageYOffset + 'px';
+                this.textarea.style.left = boxCoord.left + 'px';
+                this.textarea.style.height = boxCoord.height + 'px';
+                this.textarea.style.width = boxCoord.width + 'px';
+                this.textarea.setAttribute('data-id', 'textarea');
+                boxCoord = null;
+
+                this.textarea.addEventListener('keydown', event => {
+                    if (event.code === 'KeyS' && (event.ctrlKey || event.metaKey)) {
+                        event.preventDefault();
+                        this._save();
+                    }
+                    if (event.code === 'Escape') {
+                        this._escape();
+                    }
+                });
+
+                this.box.insertAdjacentElement('afterEnd', this.textarea);
+
+            }
+
+            _edit() {
+                console.log('_edit');
+                event.target.style.visibility = 'hidden';
+                this.textarea.value = event.target.innerHTML;
+                this.textarea.focus();
+            }
+
+            _save() {
+                console.log('_save');
+                this.box.style.visibility = '';
+                this.box.innerHTML = this.textarea.value;
+                this.textarea.remove();
+                this.box.focus();
+            }
+            _escape() {
+                console.log('_escape');
+                this.textarea.remove();
+                this.box.style.visibility = '';
+                this.box.focus();
+            }
+        }
+
+        let editBox = new EditBox({
+            dataAttr: 'editbox'
+        })
+    </script>
+</body>
+</html>
