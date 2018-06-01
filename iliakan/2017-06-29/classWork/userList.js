@@ -13,18 +13,18 @@ class UserList {
     }
 
     render() {
-
-        let html = _.template('<div class="user-list loading>"></div>')();
+        let html = _.template('<div class="user-list"></div>')();
         this.elem = createElementFromHTML(html);
+    }
 
+    showUsers(users) {
+        this.users = users;
 
-        // let html = _.template('<div class="user-list>">\n' +
-        //     '        <ul>\n' +
-        //     '            <% for(let user of users) { %>\n' +
-        //     '                <li><a href="#" data-id="<%=user._di>"><%=user.fullName%></a></li>\n' +
-        //     '            <% } %>\n' +
-        //     '        </ul>\n' +
-        //     '    </div>')();
+        this.elem.innerHTML = _.template('<ul>\n' +
+            '            <% for (let user of users) { %>\n' +
+            '                <li><a href="#" data-id="<%=user._id %>"><%=user.fullName %></a></li>\n' +
+            '            <% } %>\n' +
+            '        </ul>')({ users });
     }
 
 

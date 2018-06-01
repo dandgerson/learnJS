@@ -16,6 +16,8 @@ class Application {
         xhr.open('GET', 'http://test-api.javascript.ru/v1/dandgerson/users');
         xhr.onload = () => {
             this.users = JSON.parse(xhr.responseText);
-        }
+            this.userList.showUsers(this.users);
+        };
+        xhr.send();
     }
 }
