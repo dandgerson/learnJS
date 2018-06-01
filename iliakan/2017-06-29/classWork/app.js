@@ -9,6 +9,18 @@ class Application {
     render() {
         document.body.append(this.userList.getElem());
         this.load();
+
+        this.userList.getElem().addEventListener('user-select', this.onUserSelect.bind(this));
+    }
+
+    onUserSelect(event) {
+        let user = this.users.find(user => user._id === event.detail);
+        console.log(user);
+        if (this.userForm) {
+            this.userForm.destroy();
+        }
+        this.userForm = new UserForm(user);
+        document.body.append(this.userForm.getElem());
     }
 
     load() {
