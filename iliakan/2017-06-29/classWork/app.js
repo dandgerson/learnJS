@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'use strict';
 
 class Application {
@@ -11,6 +12,7 @@ class Application {
         this.load();
 
         this.userList.getElem().addEventListener('user-select', this.onUserSelect.bind(this));
+        this.userList.getElem().addEventListener('click', this.updateUserList.bind(this));
     }
 
     onUserSelect(event) {
@@ -20,6 +22,7 @@ class Application {
             this.userForm.destroy();
         }
         this.userForm = new UserForm(user);
+        console.log(this.userForm);
         document.body.append(this.userForm.getElem());
     }
 
@@ -39,6 +42,15 @@ class Application {
         xhr.onerror = () => {
             alert('Sorry error! Try again later');
         };
+    }
+
+    updateUserList(event) {
+        if (this.userForm.patchUser) {
+            console.log(this.userForm.patchUser);
+            this.load();
+            this.userForm.destroy();
+
+        }
     }
 
 

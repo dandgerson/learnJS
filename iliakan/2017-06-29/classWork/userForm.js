@@ -71,6 +71,7 @@ class UserForm {
             if (xhr.status !== 200)
                 console.log('Error: ' + xhr.responseText);
             console.log('Ok!');
+            this.patchUser = true;
         };
 
         xhr.onerror = () => {
