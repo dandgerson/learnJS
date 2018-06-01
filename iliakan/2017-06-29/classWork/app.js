@@ -15,7 +15,7 @@ class Application {
 
     onUserSelect(event) {
         let user = this.users.find(user => user._id === event.detail);
-        console.log(user);
+        // console.log(user);
         if (this.userForm) {
             this.userForm.destroy();
         }
@@ -27,9 +27,19 @@ class Application {
         let xhr = new XMLHttpRequest();
         xhr.open('GET', 'http://test-api.javascript.ru/v1/dandgerson/users');
         xhr.onload = () => {
+            if (xhr.status !== 200)
+                console.log('Error: ' + xhr.responseText);
+            console.log('Ok!');
+
             this.users = JSON.parse(xhr.responseText);
             this.userList.showUsers(this.users);
         };
         xhr.send();
+
+        xhr.onerror = () => {
+            alert('Sorry error! Try again later');
+        };
     }
+
+
 }
