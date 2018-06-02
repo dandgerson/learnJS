@@ -49,12 +49,13 @@ class UserForm {
         // TODO: TRIGGER EVENT
         // (app will update user in userList and close
 
-        event.preventDefault();
-
         this.elem.dispatchEvent(new CustomEvent('user-upload', {
             bubbles: true,
             detail: this.user
         }));
+
+        event.preventDefault();
+
     }
 
     upload() {
