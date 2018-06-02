@@ -47,7 +47,7 @@ class Application {
     }
 
     updateUserList() {
-        console.log(event.type);
+        // console.log(event.type);
         this.userForm.upload();
         this.userList.showUsers(this.users);
         this.userForm.hide();

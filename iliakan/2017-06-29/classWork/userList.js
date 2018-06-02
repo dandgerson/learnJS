@@ -45,9 +45,9 @@ class UserList {
             '        </ul>')({ users });
     }
 
-    updateUser() {
-        // ...
-    }
+    // updateUser() {
+    //     // ...
+    // }
 
 
 }
