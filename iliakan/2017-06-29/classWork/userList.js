@@ -21,9 +21,7 @@ class UserList {
 
     handleEvent(event) {
         this[
-            'on' +
-            event.type[0].toUpperCase() +
-            event.type.slice(1)
+            'on' + event.type[0].toUpperCase() + event.type.slice(1) // 'on' + 'C' + 'lick';
         ](event);
     }
 
