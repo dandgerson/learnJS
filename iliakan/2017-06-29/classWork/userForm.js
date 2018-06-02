@@ -54,7 +54,7 @@ class UserForm {
         // TODO: TRIGGER EVENT
         // (app will update user in userList and close
 
-        console.log(this.user);
+        // console.log(this.user);
         event.preventDefault();
     }
 
