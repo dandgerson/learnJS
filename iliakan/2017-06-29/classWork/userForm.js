@@ -45,14 +45,16 @@ class UserForm {
             }
         }
 
-        this.upload();
-
         // TODO: SAVE ON SERVER
         // TODO: TRIGGER EVENT
         // (app will update user in userList and close
 
-        console.log(this.user);
         event.preventDefault();
+
+        this.elem.dispatchEvent(new CustomEvent('user-upload', {
+            bubbles: true,
+            detail: this.user
+        }));
     }
 
     upload() {
@@ -68,7 +70,6 @@ class UserForm {
             if (xhr.status !== 200)
                 console.log('Error: ' + xhr.responseText);
             console.log('UserForm.upload() is Ok!');
-            this.patchUser = true;
         };
 
         xhr.onerror = () => {
@@ -83,7 +84,6 @@ class UserForm {
     }
 
     hide() {
-        console.log('userFofm.hide is Ok!');
         this.elem.remove();
     }
 }

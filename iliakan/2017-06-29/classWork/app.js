@@ -12,22 +12,18 @@ class Application {
         this.load();
 
         this.userList.getElem().addEventListener('user-select', this.onUserSelect.bind(this));
+        document.addEventListener('user-upload', this.updateUserList.bind(this));
+
     }
 
     onUserSelect(event) {
         let user = this.users.find(user => user._id === event.detail);
         this.user = user;
-        // console.log(user);
         if (this.userForm) {
             this.userForm.destroy();
         }
 
         this.userForm = new UserForm(user);
-
-        this.timerId = setInterval(this.updateUserList.bind(this), 1000);
-
-        console.log('userForm is Ok!: ');
-        console.log(this.userForm);
 
         document.body.append(this.userForm.getElem());
     }
@@ -51,12 +47,10 @@ class Application {
     }
 
     updateUserList() {
-        console.log('updateUserList is Ok!');
-        if (this.userForm && this.userForm.patchUser) {
-            this.userForm.hide();
-            clearInterval(this.timerId);
-            this.load();
-        }
+        console.log(event.type);
+        this.userForm.upload();
+        this.userList.showUsers(this.users);
+        this.userForm.hide();
     }
 
 
