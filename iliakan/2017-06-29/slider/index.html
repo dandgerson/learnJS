@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Slider</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="slider" class="slider">
+        <div class="thumb"></div>
+    </div>
+
+    <div id="container"></div>
+    <div id="container2"></div>
+
+    <script src="slider.js"></script>
+    <script>
+        let slider = new Slider({
+            container: document.querySelector('#container')
+        });
+        let slider2 = new Slider({
+            container: document.querySelector('#container2')
+        });
+    </script>
+</body>
+</html>
