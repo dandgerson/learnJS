@@ -31,7 +31,7 @@ class Slider {
         this.thumb = document.createElement('div');
         this.thumb.setAttribute('data-id', 'thumb');
 
-        this.thumb.addEventListener('dragstart', () => {return false;});
+        this.thumb.addEventListener('dragstart', event => {event.preventDefault();});
         this.thumb.addEventListener('mousedown', this.onMouseDown.bind(this));
     }
 
@@ -49,15 +49,15 @@ class Slider {
 
         this._moveAtX();
 
-        document.onmousemove = () => this.onMouseMove();
-        document.onmouseup = () => this.onMouseUp();
+        document.onmousemove = event => this.onMouseMove();
+        document.onmouseup = event => this.onMouseUp();
     }
 
-    onMouseMove(event) {
+    onMouseMove() {
         this._moveAtX();
     }
 
-    onMouseUp(event) {
+    onMouseUp() {
         document.onmousemove = null;
         document.onmouseup = null;
     }
