@@ -12,16 +12,19 @@ class Application {
         this.load();
 
         this.userList.getElem().addEventListener('user-select', this.onUserSelect.bind(this));
+        document.addEventListener('user-upload', this.updateUserList.bind(this));
+
     }
 
     onUserSelect(event) {
         let user = this.users.find(user => user._id === event.detail);
-        // console.log(user);
+        this.user = user;
         if (this.userForm) {
             this.userForm.destroy();
         }
+
         this.userForm = new UserForm(user);
-        // console.log(this.userForm);
+
         document.body.append(this.userForm.getElem());
     }
 
@@ -31,7 +34,7 @@ class Application {
         xhr.onload = () => {
             if (xhr.status !== 200)
                 console.log('Error: ' + xhr.responseText);
-            console.log('Ok!');
+            console.log('Application.load() is Ok!');
 
             this.users = JSON.parse(xhr.responseText);
             this.userList.showUsers(this.users);
@@ -41,6 +44,13 @@ class Application {
         xhr.onerror = () => {
             alert('Sorry error! Try again later');
         };
+    }
+
+    updateUserList() {
+        // console.log(event.type);
+        this.userForm.upload();
+        this.userList.showUsers(this.users);
+        this.userForm.hide();
     }
 
 
