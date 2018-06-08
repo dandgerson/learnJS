@@ -1,0 +1,16 @@
+body {
+    background-color: lightgray;
+}
+
+.user-list {
+    width: 300px;
+    display: inline-block;
+    border-left: 3px solid darkgreen;
+}
+
+.user-form {
+    width: 300px;
+    display: inline-block;
+    outline: 2px solid darkslategrey;
+    vertical-align: top;
+}

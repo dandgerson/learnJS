@@ -1,21 +1,7 @@
 'use strict';
+import * as lib from '../libs/lib';
 
-export let one = 1;
-
-export class User {
-    constructor(name) {
-        this.name = name;
-    }
-    getName() {
-        return this.name;
-    }
-
-    hello() {
-        console.log(`Hello ${this.name}`);
-    }
-}
-
-export class UserList {
+export default class UserList {
     constructor() {
 
     }

@@ -1,6 +1,7 @@
 'use strict';
+import * as lib from '../libs/lib';
 
-export class UserForm {
+export default class UserForm {
     constructor(user) {
         this.user = user;
     }
