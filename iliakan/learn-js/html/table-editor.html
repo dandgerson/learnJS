@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sandbox</title>
+    <style>
+      body {
+        background-color: lightgray;
+        box-sizing: border-box;
+        padding: 0;
+        padding-top: 20px;
+      }
+
+      /* common styles for the table, no need to modify these */
+      th {
+        text-align: center;
+        font-weight: bold;
+      }
+
+      td {
+        width: 150px;
+        white-space: nowrap;
+        text-align: center;
+        vertical-align: middle;
+        padding: 10px;
+      }
+
+      .nw {
+        background-color: #999;
+      }
+
+      .n {
+        background-color: #03f;
+        color: #fff;
+      }
+
+      .ne {
+        background-color: #ff6;
+      }
+
+      .w {
+        background-color: #ff0;
+      }
+
+      .c {
+        background-color: #60c;
+        color: #fff;
+      }
+
+      .e {
+        background-color: #09f;
+        color: #fff;
+      }
+
+      .sw {
+        background-color: #963;
+        color: #fff;
+      }
+
+      .s {
+        background-color: #f60;
+        color: #fff;
+      }
+
+      .se {
+        background-color: #0c3;
+        color: #fff;
+      }
+
+      .edit-box {
+        padding: 0;
+        margin: 0;
+      }
+
+      .edit {
+        font-family: 'Fira code';
+        font-size: 10px;
+        display: block;
+        border: 0;
+        padding: 0;
+        resize: none;
+        margin: 0 auto;
+      }
+
+      .edit:focus {
+        outline: none;
+        /* remove focus border in Safari */
+      }
+    </style>
+    <!--     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script> -->
+  </head>
+  <body>
+    <p>Click on a table cell to edit it. Press OK or CANCEL when you finish.</p>
+    <table id="bagua-table">
+      <tr>
+        <th colspan="3">
+          <em>Bagua</em>
+          Chart: Direction, Element, Color, Meaning
+        
+        </th>
+      </tr>
+      <tr>
+        <td class="nw">
+          <strong>Northwest</strong>
+          <br>
+          Metal
+        <br>
+          Silver
+        <br>Elders
+        </td>
+        <td class="n">
+          <strong>North</strong>
+          <br>
+          Water
+        <br>
+          Blue
+        <br>Change
+        
+        </td>
+        <td class="ne">
+          <strong>Northeast</strong>
+          <br>
+          Earth
+        <br>
+          Yellow
+        <br>Direction
+        
+        </td>
+      </tr>
+      <tr>
+        <td class="w">
+          <strong>West</strong>
+          <br>
+          Metal
+        <br>
+          Gold
+        <br>Youth
+        
+        </td>
+        <td class="c">
+          <strong>Center</strong>
+          <br>
+          All
+        <br>
+          Purple
+        <br>Harmony
+        
+        </td>
+        <td class="e">
+          <strong>East</strong>
+          <br>
+          Wood
+        <br>
+          Blue
+        <br>Future
+        
+        </td>
+      </tr>
+      <tr>
+        <td class="sw">
+          <strong>Southwest</strong>
+          <br>
+          Earth
+        <br>
+          Brown
+        <br>Tranquility
+        
+        </td>
+        <td class="s">
+          <strong>South</strong>
+          <br>
+          Fire
+        <br>
+          Orange
+        <br>Fame
+        
+        </td>
+        <td class="se">
+          <strong>Southeast</strong>
+          <br>
+          Wood
+        <br>
+          Green
+        <br>Romance
+        
+        </td>
+      </tr>
+    </table>
+    <script>
+
+      class TableEditor {
+        constructor({table}) {
+          this.table = table;
+          this._makeEditable();
+          this._makeFocusable();
+
+          document.addEventListener('focus', this, true);
+        }
+        _makeEditable() {
+          const tds = this.table.querySelectorAll('td');
+          for (let td of tds) {
+            td.setAttribute('data-editable', true);
+          }
+        }
+        _makeFocusable() {
+          const focusable = document.querySelectorAll('[data-editable]');
+          let index = 1;
+          for (let elem of focusable) {
+            elem.tabIndex = index++ + '';
+          }
+        }
+        handleEvent(event) {
+          this[`on${event.type[0].toUpperCase() + event.type.slice(1)}`]();
+        }
+        onClick() {
+          event.target.name === 'save' && this._save();
+          event.target.name === 'cancel' && this._cancel();
+        }
+        onFocus() {
+          if (event.target.hasAttribute('data-editable')) {
+            this._renderEditBox();
+          }
+        }
+        onBlur() {
+          this._pane.focus();
+        }
+        _renderEditBox() {
+          this._editBox = document.createElement('div');
+          this._renderPane();
+          this._renderPaneInterface();
+          document.body.append(this._editBox);
+
+          Object.assign(this._editBox.style, {
+            position: 'absolute',
+            top: this._boxCoords.top + 'px',
+            left: this._boxCoords.left + 'px',
+            width: this._boxCoords.width + 'px',
+            //               overflow: 'hidden',
+          });
+
+          this._pane.focus();
+        }
+        _renderPane() {
+          this._pane = document.createElement('textarea');
+          this._pane.classList.add('edit');
+
+          this._box = event.target;
+          this._boxData = this._box.innerHTML.trim();
+          this._boxCoords = this._box.getBoundingClientRect();
+
+          this._pane.value = this._boxData;
+
+          Object.assign(this._pane.style, {
+            height: this._boxCoords.height + 'px',
+            width: this._boxCoords.width + 'px',
+            //               overflow: 'hidden',
+          });
+          this._editBox.append(this._pane);
+
+          this._pane.addEventListener('blur', this, true);
+        }
+        _renderPaneInterface() {
+          const paneInterface = document.createElement('div');
+          const _template = `
+            <input type="button" name="save" value="save">
+            <input type="button" name="cancel" value="cancel">`;
+          paneInterface.insertAdjacentHTML('afterBegin', _template);
+
+          Object.assign(paneInterface.style, {
+            textAlign: 'center',
+          })
+
+          this._editBox.append(paneInterface);
+          
+          paneInterface.addEventListener('click', this);
+        }
+        _save() {
+          this._pane.removeEventListener('blur', this, true);
+          this._box.innerHTML = this._pane.value;
+          this._editBox.remove();
+        }
+        _cancel() {
+          this._pane.removeEventListener('blur', this, true);
+          this._box.innerHTML = this._boxData;
+          this._editBox.remove();
+        }
+      }
+
+      const tableEditor = new TableEditor({
+        table: document.querySelector('#bagua-table'),
+      });
+    </script>
+  </body>
+</html>

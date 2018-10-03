@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sandbox</title>
+    <style>
+      body {
+        background-color: lightgray;
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+      }
+
+      #field {
+        background: url(field.svg);
+        width: 800px;
+        height: 500px;
+        float: left;
+      }
+
+      /* heroes and the ball (dragables) */
+      .hero {
+        background: url(https://js.cx/drag-heroes/heroes.png);
+        width: 130px;
+        height: 128px;
+        float: left;
+      }
+
+      #hero1 {
+        background-position: 0 0;
+      }
+
+      #hero2 {
+        background-position: 0 -128px;
+      }
+
+      #hero3 {
+        background-position: -120px 0;
+      }
+
+      #hero4 {
+        background-position: -125px -128px;
+      }
+
+      #hero5 {
+        background-position: -248px -128px;
+      }
+
+      #hero6 {
+        background-position: -244px 0;
+      }
+
+      .draggable {
+        cursor: pointer;
+      }
+    </style>
+    <!--     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script> -->
+  </head>
+  <body>
+    <h2>Place superheroes around the soccer field.</h2>
+    <p>Superheroes and the ball are elements with the class "draggable". Make them really draggable.</p>
+    <p>Important: limit dragging by the window. If a draggable reaches window top or bottom, then the page should scroll to let us drag it further.</p>
+    <p>If your screen is big enough to fit the whole document -- make the window smaller to get vertical scrolling, so that you could test it.</p>
+    <p>In this task it's enough to handle vertical scrolling. There's no horizontal scrolling usually, and it's handled the similar way if needed.</p>
+    <p>And one more thing: heroes may never leave the page. If they reach the edge of the document, no dragging outside of it.</p>
+    <div id="field"></div>
+    <div class="hero draggable" data-draggable="true" id="hero1"></div>
+    <div class="hero draggable" data-draggable="true" id="hero2"></div>
+    <div class="hero draggable" data-draggable="true" id="hero3"></div>
+    <div class="hero draggable" data-draggable="true" id="hero4"></div>
+    <div class="hero draggable" data-draggable="true" id="hero5"></div>
+    <div class="hero draggable" data-draggable="true" id="hero6"></div>
+    <img src="https://en.js.cx/clipart/ball.svg" class="draggable" data-draggable="true">
+    <div style="clear:both"></div>
+    <script>
+      class Dragdrop {
+        constructor() {
+          this.currentDroppable = null;
+          document.addEventListener('mousedown', this);
+          document.addEventListener('mouseover', this);
+          document.addEventListener('dragstart', this);
+        }
+
+        moveAt(pageX, pageY) {
+          Object.assign(this.elem.style, {
+            left: pageX - this.shiftX + 'px',
+            top: pageY - this.shiftY + 'px',
+          });
+        }
+
+        enterDroppable(droppable) {
+          this.currentDroppable = droppable;
+          droppable.classList.add('enter');
+        }
+
+        leaveDroppable(droppable) {
+          droppable && droppable.classList.remove('enter');
+          this.currentDroppable = null;
+        }
+
+        handleEvent(event) {
+          this[`on${event.type[0].toUpperCase() + event.type.slice(1)}`]();
+        }
+
+        onMouseover() {
+          if (event.target.hasAttribute('data-draggable') && event.target.dataset.draggable === 'true') {
+            Object.assign(event.target.style, {
+              cursor: 'grab',
+            });
+          }
+        }
+
+        onMousedown() {
+          if (event.target.hasAttribute('data-draggable') && event.target.dataset.draggable === 'true') {
+            this.elem = event.target;
+            this.shiftX = event.clientX - this.elem.getBoundingClientRect().left;
+            this.shiftY = event.clientY - this.elem.getBoundingClientRect().top;
+
+            Object.assign(this.elem.style, {
+              position: 'absolute',
+              zIndex: 1000,
+            });
+
+            document.body.append(this.elem);
+
+            setTimeout(()=>{
+              Object.assign(this.elem.style, {
+                cursor: 'grabbing',
+              });
+            }
+            , 0);
+
+            this.moveAt(event.pageX, event.pageY);
+
+            document.addEventListener('mousemove', this);
+            this.elem.addEventListener('mouseup', this);
+          }
+        }
+
+        onMousemove() {
+          this.moveAt(event.pageX, event.pageY);
+
+          Object.assign(this.elem.style, {
+            cursor: 'grabbing',
+          });
+
+          this.elem.hidden = true;
+          const elemBelow = document.elementFromPoint(event.clientX, event.clientY);
+          this.elem.hidden = false;
+
+          elemBelow && (this.droppable = elemBelow.closest('[data-droppable="true"]'));
+          if (this.currentDroppable !== this.droppable) {
+            this.droppable && this.enterDroppable(this.droppable);
+            this.droppable || this.leaveDroppable(this.currentDroppable);
+          }
+        }
+
+        onMouseup() {
+          this.elem && Object.assign(this.elem.style, {
+            cursor: 'grab',
+          });
+
+          document.removeEventListener('mousemove', this);
+          document.removeEventListener('mouseup', this);
+
+          this.elem = null;
+          this.droppable = null;
+        }
+
+        onDragstart() {
+          event.preventDefault();
+        }
+      }
+      class DragHero extends Dragdrop {
+          onMousemove() {
+              super.onMousemove();
+              const elemCoords = this.elem.getBoundingClientRect();
+              const bodyCoords = document.body.getBoundingClientRect();
+              if (elemCoords.right >= bodyCoords.right) {
+                  Object.assign(this.elem.style, {
+                      left: bodyCoords.right - this.elem.offsetWidth + 'px',
+                  });
+              }
+              if (elemCoords.left <= bodyCoords.left) {
+                  Object.assign(this.elem.style, {
+                      left: bodyCoords.left + 'px',
+                  });
+              }
+          }
+      }
+      new DragHero();
+    </script>
+  </body>
+</html>

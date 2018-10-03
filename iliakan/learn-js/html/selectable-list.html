@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Sandbox</title>
+        <style>
+            body {
+                background-color: lightgray;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            .selected {
+                background: #0f0;
+            }
+
+            li {
+                cursor: pointer;
+            }
+        </style>
+        <!--         <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script> -->
+    </head>
+    <body>
+        Click on a list item to select it.
+  <br>
+        <ul id="ul">
+            <li>Christopher Robin</li>
+            <li>Winnie-the-Pooh</li>
+            <li>Tigger</li>
+            <li>Kanga</li>
+            <li>Rabbit. Just rabbit.</li>
+        </ul>
+    </body>
+    <script>
+        class SelectableList {
+            constructor(list) {
+                this.list = list;
+                this.lastSelected = null;
+
+                this.list.addEventListener('click', this);
+                this.list.addEventListener('mousedown', this);
+            }
+            handleEvent(event) {
+                this[`_on${event.type[0].toUpperCase() + event.type.slice(1)}`]();
+            }
+            _onClick() {
+                this._select();
+            }
+            _onMousedown() {
+                event.preventDefault();
+            }
+            _select() {
+                let item = event.target.closest('li');
+
+                item && item.firstElementChild && item.firstElementChild.tagName === 'SPAN' && item.firstElementChild.dataset.type === 'wrapper' || addWrapperFor(item);
+
+                if (document.elementFromPoint(event.clientX, event.clientY).dataset.type === 'wrapper') {
+                    removeWrapperFrom(item);
+
+                    if (event.metaKey || event.ctrlKey) {
+                        addWrapperFor(item);
+                        item.firstElementChild.classList.add('selected');
+                        this.lastSelected = item;
+                        return;
+                    }
+
+                    if (event.shiftKey) {
+                        let items = Array.from(this.list.children);
+                        let lastSelectedIndex = items.findIndex(x=>x === this.lastSelected);
+                        let currentIndex = items.findIndex(x=>x === item);
+                        items = lastSelectedIndex <= currentIndex ? items.slice(lastSelectedIndex + 1, currentIndex + 1) : items.slice(currentIndex, lastSelectedIndex);
+
+                        for (let item of items) {
+                            addWrapperFor(item);
+                            item.firstElementChild.classList.add('selected');
+                        }
+                        return;
+
+                    }
+
+                    removeWrappersFrom(this.list.children);
+
+                    addWrapperFor(item);
+
+                    item.firstElementChild.classList.add('selected');
+                    this.lastSelected = item;
+                } else {
+                    removeWrappersFrom(this.list.children);
+                    return;
+                }
+
+                function addWrapperFor(item) {
+                    item && (item.innerHTML = `<span data-type="wrapper">${item.innerHTML}</span>`);
+                }
+                function addWrappersFor(items) {
+                    for (let item of items) {
+                        item.innerHTML = `<span data-type="wrapper">${item.innerHTML}</span>`;
+                    }
+                }
+                function removeWrapperFrom(item) {
+                    if (item && item.firstElementChild && item.firstElementChild.tagName === 'SPAN' && item.firstElementChild.dataset.type === 'wrapper') {
+                        item.insertAdjacentHTML('beforeEnd', item.firstElementChild.innerHTML);
+                        item.firstElementChild.remove();
+                        removeWrapperFrom(item);
+                    }
+                }
+                function removeWrappersFrom(items) {
+                    if (items && (items.constructor === Array || typeof items[Symbol.iterator] === 'function')) {
+                        for (let item of items) {
+                            if (item.firstElementChild && item.firstElementChild.tagName === 'SPAN' && item.firstElementChild.dataset.type === 'wrapper') {
+                                removeWrapperFrom(item);
+                            }
+
+                        }
+                    }
+                }
+            }
+
+        }
+        let selectableList = new SelectableList(document.querySelector('ul'));
+    </script>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sandbox</title>
+    <style>
+      body {
+        background-color: lightgray;
+        box-sizing: border-box;
+        padding: 0;
+        padding-top: 20px;
+      }
+
+      .view, .edit {
+        height: 150px;
+        width: 400px;
+        font-family: arial;
+        font-size: 14px;
+      }
+
+      .view {
+        /* padding + border = 3px */
+        padding: 2px;
+        border: 1px solid black;
+      }
+
+      .edit {
+        /* replace padding with border (still 3px not to shift the contents) */
+        display: block;
+        border: 3px solid blue;
+        padding: 0px;
+      }
+
+      .edit:focus {
+        outline: none;
+        /* remove focus border in Safari */
+      }
+    </style>
+    <!--     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script> -->
+  </head>
+  <body>
+    <ul>
+      <li>Click the div to edit.</li>
+      <li>Enter or blur saves the result.</li>
+    </ul>
+    HTML is allowed.
+
+  <div id="view" data-editable="true" class="view">Text</div>
+    <script>
+      class Editor {
+        constructor() {
+          this._makeFocusable();
+          document.addEventListener('focus', this, true);
+        }
+        handleEvent(event) {
+          this[`on${event.type[0].toUpperCase() + event.type.slice(1)}`]();
+        }
+        onFocus() {
+          if (event.target.hasAttribute('data-editable')) {
+            this._renderPane();
+            this._hideBox();
+          }
+        }
+        onBlur() {
+          this._renderBox();
+          this._hidePane();
+        }
+        onKeydown() {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            
+            this._pane.blur();
+          }
+        }
+        _makeFocusable() {
+          const focusable = document.querySelectorAll('[data-editable]');
+          let index = 1;
+          for (let elem of focusable) {
+            elem.tabIndex = index++ + '';
+          }
+        }
+        _renderPane() {
+          this._pane = document.createElement('textarea');
+          this._pane.classList.add('edit');
+
+          this._box = event.target;
+          this._pane.value = this._box.innerHTML;
+          this._box.before(this._pane);
+
+          this._pane.focus();
+
+          this._pane.addEventListener('blur', this, true);
+          this._pane.addEventListener('keydown', this);
+        }
+        _renderBox() {
+          this._box.innerHTML = this._pane.value;
+          this._pane.before(this._box);
+        }
+        _hidePane() {
+          this._pane.remove();
+          this._pane = null;
+        }
+        _hideBox() {
+          this._box.remove();
+        }
+      }
+      new Editor();
+    </script>
+  </body>
+</html>

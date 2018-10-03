@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sandbox</title>
+    <style>
+      body {
+        background-color: lightgray;
+        box-sizing: border-box;
+        padding: 0;
+        padding-top: 20px;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+  </head>
+  <body>
+    <select id="genres">
+      <option value="rock">Rock</option>
+      <option value="blues" selected>Blues</option>
+    </select>
+    <script>
+      // 1)
+      const select = document.querySelector('#genres');
+      
+      console.log(
+        '[option value]:', select.options[select.selectedIndex].value,
+        '[option text]:', select.options[select.selectedIndex].text
+      );
+      // 2) and 3)
+      select.append(new Option('Classic','classic', false, true));
+    </script>
+  </body>
+</html>

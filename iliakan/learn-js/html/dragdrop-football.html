@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sandbox</title>
+    <style>
+      body {
+        background-color: lightgray;
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        font-family: 'Fira code';
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-around;
+        align-items: center;
+        height: 100vh;
+      }
+
+      h1 {
+        font-size: 2rem;
+        text-align: center;
+        font-weight: bold;
+        padding: 20px 0;
+      }
+
+      .score {
+        font-size: 2rem;
+      }
+
+      .field {
+        width: 400px;
+        height: 500px;
+        background-color: lightgreen;
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-between;
+        align-items: center;
+        border: 2px solid black;
+        border-radius: 3px;
+      }
+
+      .ball {
+        position: absolute;
+        top: 60%;
+        left: 46.5%;
+      }
+      [gate-top] {
+          margin-top: 20px;
+      }
+
+      [gate-bottom] {
+        transform: rotate(180deg);
+        margin-bottom: 20px;
+      }
+
+      .enter {
+        background-color: pink;
+      }
+    </style>
+    <!--     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script> -->
+  </head>
+  <body>
+    <h1>Drag'n'Drop Football</h1>
+    <div class="score">
+      Score: <span score-top>0</span>:<span score-bottom>0</span>
+    </div>
+    <div class="field">
+      <img src="./soccer-gate.svg" gate-top data-droppable='true'>
+      <img src="./soccer-gate.svg" gate-bottom data-droppable='true'>
+    </div>
+    <img class="ball" data-draggable="true" src="./ball.svg">
+    <script>
+      class Dragdrop {
+        constructor() {
+          this.currentDroppable = null;
+          document.addEventListener('mousedown', this);
+          document.addEventListener('mouseover', this);
+          document.addEventListener('dragstart', this);
+        }
+
+        moveAt(pageX, pageY) {
+          Object.assign(this.elem.style, {
+            left: pageX - this.shiftX + 'px',
+            top: pageY - this.shiftY + 'px',
+          });
+        }
+
+        enterDroppable(droppable) {
+          this.currentDroppable = droppable;
+          droppable.classList.add('enter');
+        }
+
+        leaveDroppable(droppable) {
+          droppable && droppable.classList.remove('enter');
+          this.currentDroppable = null;
+        }
+
+        handleEvent(event) {
+          this[`on${event.type[0].toUpperCase() + event.type.slice(1)}`]();
+        }
+
+        onMouseover() {
+          if (event.target.hasAttribute('data-draggable') && event.target.dataset.draggable === 'true') {
+            Object.assign(event.target.style, {
+              cursor: 'grab',
+            });
+          }
+        }
+
+        onMousedown() {
+          if (event.target.hasAttribute('data-draggable') && event.target.dataset.draggable === 'true') {
+            this.elem = event.target;
+            this.shiftX = event.clientX - this.elem.getBoundingClientRect().left;
+            this.shiftY = event.clientY - this.elem.getBoundingClientRect().top;
+
+            Object.assign(this.elem.style, {
+              position: 'absolute',
+              zIndex: 1000,
+            });
+
+            document.body.append(this.elem);
+
+            setTimeout(()=>{
+              Object.assign(this.elem.style, {
+                cursor: 'grabbing',
+              });
+            }
+            , 0);
+
+            document.addEventListener('mousemove', this);
+            this.elem.addEventListener('mouseup', this);
+          }
+        }
+
+        onMousemove() {
+          this.moveAt(event.pageX, event.pageY);
+
+          Object.assign(this.elem.style, {
+            cursor: 'grabbing',
+          });
+
+          this.elem.hidden = true;
+          const elemBelow = document.elementFromPoint(event.clientX, event.clientY);
+          this.elem.hidden = false;
+
+          elemBelow && (this.droppable = elemBelow.closest('[data-droppable="true"]'));
+          if (this.currentDroppable !== this.droppable) {
+            this.droppable && this.enterDroppable(this.droppable);
+            this.droppable || this.leaveDroppable(this.currentDroppable);
+          }
+        }
+
+        onMouseup() {
+          this.elem && Object.assign(this.elem.style, {
+            cursor: 'grab',
+          });
+
+          document.removeEventListener('mousemove', this);
+          document.removeEventListener('mouseup', this);
+
+          this.elem = null;
+          this.droppable = null;
+        }
+
+        onDragstart() {
+          event.preventDefault();
+        }
+      }
+
+      class SoccerDragdrop extends Dragdrop {
+          constructor() {
+              super();
+              this.scoreTop = 0;
+              this.scoreBottom = 0;
+          }
+        onMousemove() {
+          super.onMousemove();
+
+          const ball = document.querySelector('.ball');
+          const field = document.querySelector('.field');
+          let ballCoords = ball.getBoundingClientRect();
+          let fieldCoords = field.getBoundingClientRect();
+
+          (ballCoords.left <= fieldCoords.left) && Object.assign(ball.style, {
+            left: fieldCoords.left + 'px',
+          });
+          (ballCoords.right >= fieldCoords.right) && Object.assign(ball.style, {
+            left: fieldCoords.right - ball.offsetWidth + 'px',
+          });
+          (ballCoords.top <= fieldCoords.top) && Object.assign(ball.style, {
+            top: fieldCoords.top + 'px',
+          });
+          (ballCoords.bottom >= fieldCoords.bottom) && Object.assign(ball.style, {
+            top: fieldCoords.bottom - ball.offsetHeight + 'px',
+          });
+        }
+        enterDroppable(droppable) {
+            super.enterDroppable(droppable);
+            const scoreTopBox = document.querySelector('[score-top]');
+            const scoreBottomBox = document.querySelector('[score-bottom]');
+
+            droppable.hasAttribute('gate-top') && (scoreBottomBox.innerHTML = ++this.scoreBottom);
+            droppable.hasAttribute('gate-bottom') && (scoreTopBox.innerHTML = ++this.scoreTop);
+        }
+      }
+      
+      new SoccerDragdrop();
+    </script>
+  </body>
+</html>

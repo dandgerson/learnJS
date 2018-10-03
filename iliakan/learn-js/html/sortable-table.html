@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Sandbox</title>
+        <style>
+            body {
+                background-color: lightgray;
+            }
+
+            table, table th, table td {
+                border: 1px solid black;
+            }
+
+            [data-type] {
+                padding: 5px;
+                cursor: pointer;
+                background: yellow;
+                text-align: center;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+    </head>
+    <body>
+        <script>
+            var users = [{
+                name: "Lada",
+                age: 25,
+                gender: 'female',
+            }, {
+                name: "John",
+                age: 10,
+                gender: 'male',
+            }, {
+                name: "Ann",
+                age: 30,
+                gender: 'female',
+            }, {
+                name: "Pete",
+                age: 15,
+                gender: 'male',
+            }, {
+                name: "Kate",
+                age: 20,
+                gender: 'female',
+            }, ];
+
+            class Table {
+                constructor({data}) {
+                    this.data = data;
+                }
+                getElem() {
+                    this._elem || (this._elem = document.createElement('div'));
+                    this._render();
+                    return this._elem;
+                }
+                _render() {
+                    let template = `
+                        <table class='table'>
+                            <thead>
+                                <tr>
+                                <% for (let key in data[0]) { %>
+                                    <th data-type="<%-key %>" data-sort-type="positive"><%-key[0].toUpperCase() + key.slice(1) %></th>
+                                <% } %>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% for (let item of data) { %>
+                                   <tr> 
+                                    <% for (let key in item) { %>
+                                        <td><%-item[key] %></td>
+                                    <% } %>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>`;
+                    template = _.template(template);
+                    this._elem.insertAdjacentHTML('afterBegin', template({
+                        data: this.data
+                    }));
+                    this._elem = this._elem.firstElementChild;
+                }
+            }
+
+            class SortableTable extends Table {
+                _render() {
+                    super._render();
+                    this._elem.addEventListener('click', this);
+                }
+                handleEvent(event) {
+                    this[`_${event.type}`]();
+                }
+                _click() {
+                    event.target.dataset.type && this._sort(event.target.dataset.type);
+                }
+                _sort(type) {
+                    let types = [];
+                    let categories = this._elem.rows[0].cells;
+
+                    for (let category of categories) {
+                        types.push(category.dataset.type);
+                    }
+
+                    let rows = Array.from(this._elem.rows).slice(1);
+                    let index = types.findIndex(element=>element === type);
+                    let sortType = categories[index].dataset.sortType;
+
+                    rows.sort((a,b)=>{
+                        a = a.children[index].innerHTML;
+                        b = b.children[index].innerHTML;
+                        return sortType === 'positive'
+                        ? typeof a === 'string' && a > b ? 1 : -1 || a - b
+                        : typeof a === 'string' && a < b ? 1 : -1 || b - a;
+                    });
+
+                    this._elem.tBodies[0].append(...rows);
+
+                    sortType === 'positive'
+                    ? categories[index].dataset.sortType = 'negative' 
+                    : categories[index].dataset.sortType = 'positive';
+                }
+            }
+            let sortableTable = new SortableTable({
+                data: users
+            });
+            document.body.prepend(sortableTable.getElem());
+        </script>
+    </body>
+</html>

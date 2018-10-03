@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sandbox</title>
+    <style>
+      body {
+        background-color: lightgray;
+        box-sizing: border-box;
+        padding: 0;
+        padding-top: 20px;
+      }
+
+      td select, td input {
+        width: 150px;
+      }
+
+      [data-id="diagram"] td {
+        vertical-align: bottom;
+        text-align: center;
+        padding: 10px;
+      }
+
+      [data-id="diagram"] div {
+        margin: auto;
+      }
+    </style>
+    <!--     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script> -->
+  </head>
+  <body>
+    Deposit calculator.
+
+  
+    
+    <script>
+      class DepositCalculator {
+        getElem() {
+          this._elem || (this._elem = document.createElement('div'));
+          this._render();
+          return this._elem;
+        }
+        handleEvent(event) {
+          this[`on${event.type[0].toUpperCase() + event.type.slice(1)}`]();
+        }
+        onInput() {
+          this.processForm();
+          this.calculate();
+          this.renderResult();
+        }
+        _render() {
+          const _template = `
+            <form name="calculator">
+              <table>
+                <tr>
+                  <td>Initial deposit</td>
+                  <td>
+                    <input name="money" type="number" value="10000" required>
+                  </td>
+                </tr>
+                <tr>
+                  <td>How many months?</td>
+                  <td>
+                    <select name="months">
+                      <option value="3">3 (minimum)</option>
+                      <option value="6">6 (half-year)</option>
+                      <option value="12" selected>12 (one year)</option>
+                      <option value="18">18 (1.5 years)</option>
+                      <option value="24">24 (2 years)</option>
+                      <option value="30">30 (2.5 years)</option>
+                      <option value="36">36 (3 years)</option>
+                      <option value="60">60 (5   years)</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Interest per year?</td>
+                  <td>
+                    <input name="interest" type="number" value="5" required>
+                  </td>
+                </tr>
+              </table>
+            </form>
+            <table data-id="diagram">
+              <tr>
+                <th>Was:</th>
+                <th>Becomes:</th>
+              </tr>
+              <tr>
+                <th data-id="money-before"></th>
+                <th data-id="money-after"></th>
+              </tr>
+              <td>
+                <div style="background: red;width:40px;height:100px"></div>
+              </td>
+              <td>
+                <div style="background: green;width:40px;height:0" data-id="height-after"></div>
+              </td>
+            </table>`;
+          this._elem.insertAdjacentHTML('afterBegin', _template);
+          this._elem.addEventListener('input', this);
+
+          this.processForm();
+          this.calculate();
+          this.renderResult();
+        }
+        processForm() {
+          const form = this._elem.querySelector('form');
+          const elements = form.elements;
+          this._data = new Map();
+          for (let element of elements) {
+            this._data.set(element.name, element.value);
+          }
+        }
+        calculate() {
+          this._result = Math.round(this._data.get("money") * (1 + (this._data.get('interest') / 100) * (this._data.get('months') / 12)));
+        }
+        renderResult() {
+          const output = this._elem.querySelector('[data-id="money-after"]');
+          output.innerHTML = this._result;
+          const block = this._elem.querySelector('[data-id="height-after"]');
+          const height = 100 + (this._result - this._data.get('money')) / (this._data.get('money') / 100);
+          Object.assign(block.style, {
+            height: height + 'px',
+          })
+        }
+      }
+
+      const depositCalc = new DepositCalculator();
+      document.body.append(depositCalc.getElem());
+    </script>
+  </body>
+</html>

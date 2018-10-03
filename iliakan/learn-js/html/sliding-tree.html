@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Sandbox</title>
+        <style>
+            body {
+                background-color: lightgray;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            .tree li span:hover {
+                font-weight: bold;
+                cursor: pointer;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+    </head>
+    <body>
+        <ul class="tree" id="tree">
+            <li>
+                Animals
+      
+                
+                
+                
+                
+                
+                
+                
+                <ul>
+                    <li>
+                        Mammals
+          
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <ul>
+                            <li>Cows</li>
+                            <li>Donkeys</li>
+                            <li>Dogs</li>
+                            <li>Tigers</li>
+                        </ul>
+                    </li>
+                    <li>
+                        Other
+          
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <ul>
+                            <li>Snakes</li>
+                            <li>Birds</li>
+                            <li>Lizards</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                Fishes
+      
+                
+                
+                
+                
+                
+                
+                
+                <ul>
+                    <li>
+                        Aquarium
+          
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <ul>
+                            <li>Guppy</li>
+                            <li>Angelfish</li>
+                        </ul>
+                    </li>
+                    <li>
+                        Sea
+          
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <ul>
+                            <li>Sea trout</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <script>
+            let tree = document.querySelector('#tree');
+            class TreeToggler {
+                constructor(tree) {
+                    this.tree = tree;
+                    this.tree.addEventListener('click', this);
+
+                    this._prepareItems();
+                }
+                _prepareItems() {
+                    for (let item of this.tree.querySelectorAll('li')) {
+                        let text = item.firstChild.data;
+                        item.firstChild.remove();
+                        let span = document.createElement('span');
+                        span.append(text)
+                        item.prepend(span);
+                    }
+                }
+                handleEvent(event) {
+                    this[`_${event.type}`]();
+                }
+                _click() {
+                    if (event.target.tagName === 'SPAN' && event.target.nextElementSibling && event.target.nextElementSibling.tagName === 'UL') {
+                        for (let li of event.target.nextElementSibling.children)
+                            this._toggle(li);
+                    }
+
+                }
+                _toggle(elem) {
+                    elem.hidden = !elem.hidden;
+                }
+            }
+            let treeToggler = new TreeToggler(tree);
+        </script>
+    </body>
+</html>

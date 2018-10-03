@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sandbox</title>
+    <style>
+      body {
+        background-color: lightgray;
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+      }
+
+      .slider {
+        border-radius: 5px;
+        background: #E0E0E0;
+        background: linear-gradient(left top, #E0E0E0, #EEEEEE);
+        width: 310px;
+        height: 15px;
+        margin: 5px;
+      }
+
+      .thumb {
+        width: 10px;
+        height: 25px;
+        border-radius: 3px;
+        position: relative;
+        left: 10px;
+        top: -5px;
+        background: blue;
+        cursor: pointer;
+      }
+    </style>
+    <!--     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script> -->
+  </head>
+  <body>
+    <div id="slider" class="slider">
+      <div class="thumb" data-draggable="true"></div>
+    </div>
+    <script>
+      class Dragdrop {
+        constructor() {
+          this.currentDroppable = null;
+          document.addEventListener('mousedown', this);
+          document.addEventListener('mouseover', this);
+          document.addEventListener('dragstart', this);
+        }
+
+        moveAt(pageX, pageY) {
+          Object.assign(this.elem.style, {
+            left: pageX - this.shiftX + 'px',
+            top: pageY - this.shiftY + 'px',
+          });
+        }
+
+        enterDroppable(droppable) {
+          this.currentDroppable = droppable;
+          droppable.classList.add('enter');
+        }
+
+        leaveDroppable(droppable) {
+          droppable && droppable.classList.remove('enter');
+          this.currentDroppable = null;
+        }
+
+        handleEvent(event) {
+          this[`on${event.type[0].toUpperCase() + event.type.slice(1)}`]();
+        }
+
+        onMouseover() {
+          if (event.target.hasAttribute('data-draggable') && event.target.dataset.draggable === 'true') {
+            Object.assign(event.target.style, {
+              cursor: 'grab',
+            });
+          }
+        }
+
+        onMousedown() {
+          if (event.target.hasAttribute('data-draggable') && event.target.dataset.draggable === 'true') {
+            this.elem = event.target;
+            this.shiftX = event.clientX - this.elem.getBoundingClientRect().left;
+            this.shiftY = event.clientY - this.elem.getBoundingClientRect().top;
+
+            Object.assign(this.elem.style, {
+              position: 'absolute',
+              zIndex: 1000,
+            });
+
+            document.body.append(this.elem);
+
+            setTimeout(()=>{
+              Object.assign(this.elem.style, {
+                cursor: 'grabbing',
+              });
+            }
+            , 0);
+
+            this.moveAt(event.pageX, event.pageY);
+
+            document.addEventListener('mousemove', this);
+            this.elem.addEventListener('mouseup', this);
+          }
+        }
+
+        onMousemove() {
+          this.moveAt(event.pageX, event.pageY);
+
+          Object.assign(this.elem.style, {
+            cursor: 'grabbing',
+          });
+
+          this.elem.hidden = true;
+          const elemBelow = document.elementFromPoint(event.clientX, event.clientY);
+          this.elem.hidden = false;
+
+          elemBelow && (this.droppable = elemBelow.closest('[data-droppable="true"]'));
+          if (this.currentDroppable !== this.droppable) {
+            this.droppable && this.enterDroppable(this.droppable);
+            this.droppable || this.leaveDroppable(this.currentDroppable);
+          }
+        }
+
+        onMouseup() {
+          this.elem && Object.assign(this.elem.style, {
+            cursor: 'grab',
+          });
+
+          document.removeEventListener('mousemove', this);
+          document.removeEventListener('mouseup', this);
+
+          this.elem = null;
+          this.droppable = null;
+        }
+
+        onDragstart() {
+          event.preventDefault();
+        }
+      }
+      class Slider extends Dragdrop {
+        moveAt(pageX, pageY) {
+          const sliderCoords = document.querySelector('.slider').getBoundingClientRect();
+          Object.assign(this.elem.style, {
+            left: pageX - this.shiftX + 'px',
+            top: sliderCoords.top + sliderCoords.height / 2 - this.elem.offsetHeight / 2 + 'px',
+          });
+        }
+        onMousemove() {
+          super.onMousemove();
+          const slider = document.querySelector('.slider');
+          const thumb = document.querySelector('.thumb');
+          const sliderCoords = slider.getBoundingClientRect();
+          const thumbCoords = thumb.getBoundingClientRect();
+
+          if (thumbCoords.left <= sliderCoords.left) {
+            Object.assign(thumb.style, {
+              left: sliderCoords.left + 'px',
+            });
+          }
+          if (thumbCoords.right >= sliderCoords.right) {
+            Object.assign(thumb.style, {
+              left: sliderCoords.right - thumb.offsetWidth + 'px',
+            });
+          }
+        }
+      }
+      new Slider();
+    </script>
+  </body>
+</html>

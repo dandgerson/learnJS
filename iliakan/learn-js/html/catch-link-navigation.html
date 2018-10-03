@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Sandbox</title>
+        <style>
+            body {
+                background-color: lightgray;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            #contents {
+                padding: 5px;
+                border: 1px green solid;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+    </head>
+    <body>
+        <fieldset id="contents">
+            <legend>#contents</legend>
+            <p>
+                How about to read <a href="http://wikipedia.org">Wikipedia</a>
+                or visit 
+                <a href="http://w3.org">
+                    <i>W3.org</i>
+                </a>
+                and learn about modern standards?
+    
+            </p>
+        </fieldset>
+        <script>
+            let contents = document.querySelector('#contents');
+            contents.addEventListener('click', event => {
+                if (event.target.closest('a') && confirmLink()) return;
+                event.preventDefault();
+            });
+            function confirmLink() {
+                return confirm(`Do you realy want to go ${event.target.textContent}`);
+            }
+        </script>
+</html>

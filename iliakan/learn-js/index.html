@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sandbox</title>
+    <style>
+      body {
+        background-color: lightgray;
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+    <!--     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script> -->
+  </head>
+  <body>
+    
+    <script>
+      const myMap = new Map();
+      for (let i = 0; i < 5; i++) {
+          myMap.set(i+'', i);
+      }
+      console.log(myMap);
+      for (let key of myMap.keys()) {
+          console.log(myMap.get(key));
+      }
+      const entries = myMap.entries();
+      for (let entry of entries) {
+          console.log('entry:', entry);
+      }
+    </script>
+  </body>
+</html>

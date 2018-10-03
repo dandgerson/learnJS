@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Sandbox</title>
+        <style>
+            body {
+                background-color: lightgray;
+                box-sizing: border-box;
+                padding: 0;
+                padding-top: 20px;
+            }
+
+            body {
+                height: 2000px;
+                /* the tooltip should work after page scroll too */
+            }
+
+            .tooltip {
+                position: fixed;
+                z-index: 100;
+                padding: 10px 20px;
+                border: 1px solid #b3c9ce;
+                border-radius: 4px;
+                text-align: center;
+                font: italic 14px/1.3 arial, sans-serif;
+                color: #333;
+                background: #fff;
+                box-shadow: 3px 3px 3px rgba(0, 0, 0, .3);
+            }
+
+            #house {
+                margin-top: 50px;
+                width: 400px;
+                border: 1px solid brown;
+            }
+
+            #roof {
+                width: 0;
+                height: 0;
+                border-left: 200px solid transparent;
+                border-right: 200px solid transparent;
+                border-bottom: 20px solid brown;
+                margin-top: -20px;
+            }
+
+            p {
+                text-align: justify;
+                margin: 10px 3px;
+            }
+        </style>
+        <!--         <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script> -->
+    </head>
+    <body>
+        <div data-tooltip="Here is the house interior" id="house">
+            <div data-tooltip="Here is the roof" id="roof"></div>
+            <p>Once upon a time there was a mother pig who had three little pigs.</p>
+            <p>The three little pigs grew so big that their mother said to them, 
+            "You are too big to live here any longer. You must go and build houses 
+            for yourselves. But take care that the wolf does not catch you."</p>
+            <p>The three little pigs set off. "We will take care that the wolf does not catch us," they said.</p>
+            <p>
+                Soon they met a man. <a href="https://en.wikipedia.org/wiki/The_Three_Little_Pigs" data-tooltip="Read on…">Hover over me</a>
+            </p>
+        </div>
+        <script>
+            class ToolTip {
+                constructor() {
+
+                    document.addEventListener('mouseover', this);
+                    document.addEventListener('mouseout', this);
+                }
+                render() {
+                    this.tooltip = document.createElement('div');
+                    this.tooltip.classList.add('tooltip');
+                    this.tooltip.innerHTML = event.target.closest('[data-tooltip]').dataset.tooltip;
+                    document.body.prepend(this.tooltip);
+
+                    let anchorCoords = event.target.closest('[data-tooltip]').getBoundingClientRect();
+                    let tooltipCoords = this.tooltip.getBoundingClientRect();
+                    let top, left, gape;
+                    gape = 5;
+                    top = anchorCoords.top - (tooltipCoords.height + gape);
+                    if (anchorCoords.top < tooltipCoords.height + gape) {
+                        top = anchorCoords.bottom + gape;
+                    }
+                    left = (anchorCoords.left + anchorCoords.width / 2) - tooltipCoords.width / 2;
+
+                    Object.assign(this.tooltip.style, {
+                        top: top + 'px',
+                        left: left + 'px',
+                    });
+                }
+                handleEvent(event) {
+                    this[`on${event.type[0].toUpperCase() + event.type.slice(1)}`]();
+                }
+                onMouseover() {
+                    if (!event.target.closest('[data-tooltip]')) {
+                        return;
+                    }
+                    this.show();
+
+                }
+                onMouseout() {
+                    this.hide();
+                }
+                show() {
+                    this.render();
+                }
+                hide() {
+                    if (this.tooltip) {
+                        this.tooltip.remove();
+                        this.tooltip = null;
+                    }
+
+                }
+            }
+            let tooltip = new ToolTip();
+        </script>
+    </body>
+</html>

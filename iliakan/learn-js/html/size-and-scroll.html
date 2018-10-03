@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Sandbox</title>
+        <style>
+            body {
+                background-color: lightgray;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+    </head>
+    <body>
+        <div></div>
+        <script>
+            let elem = document.createElement('div');
+            Object.assign(elem.style, {
+                width: '300px',
+                height: '300px',
+                background: 'lightgreen',
+                border: '25px solid green',
+                padding: '20px',
+                margin: 'auto',
+                overflow: 'auto',
+            });
+            document.body.prepend(elem);
+            let foo = `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus magni quaerat delectus sed illo beatae aut quae doloribus earum quas nostrum optio ratione debitis, error obcaecati, velit atque numquam praesentium nam hic ipsum voluptas aliquam ab esse? Quo voluptatum libero sit aliquam voluptates minus porro? Blanditiis maiores magni dolorum ab laboriosam iusto, ea ipsum officia deserunt debitis vitae autem nam dolorem sapiente hic eos modi quas cupiditate reprehenderit numquam nesciunt quod? Ipsam mollitia dolores, quo necessitatibus quia in voluptates aspernatur impedit dolore illo soluta quae, nulla vel maiores veniam eum laboriosam? Labore temporibus nihil esse doloribus nemo, fugit fuga a expedita amet quia id modi eveniet laboriosam sed quae ex atque est autem rerum quam in adipisci officia nesciunt! Fuga rem repellat assumenda officia incidunt, molestias amet possimus excepturi reiciendis et qui explicabo id corporis ipsam nobis. Dolorem, temporibus? Ducimus vero assumenda quibusdam, cum modi quidem animi exercitationem ab, veniam molestias laborum, laboriosam nobis iusto optio. Tempora pariatur quibusdam id, natus fugit porro eum qui, magnam fuga illum, dolor dolorem quae debitis! Quia adipisci alias cupiditate harum eveniet. Aspernatur quia sapiente quae culpa soluta ratione suscipit facilis sint. Aliquid, amet. Odit doloremque pariatur ea, dolore suscipit corrupti blanditiis illo! Unde voluptatum iste delectus alias dignissimos adipisci ducimus dolore facilis culpa a ad non saepe odio, blanditiis fugiat eligendi magnam quaerat beatae, quas doloribus eaque vero commodi omnis. Corrupti reiciendis quae sunt quibusdam alias voluptate vitae, dolor voluptatum repellat sapiente odit placeat eligendi error. Voluptas facere quos ipsum consectetur nemo quibusdam reprehenderit nulla, accusantium repellendus nesciunt vero illo unde fuga quidem voluptatibus minima nisi a? Dolorem earum deserunt a vero sapiente repudiandae recusandae rerum sed ut laudantium magni minus quas at ad nesciunt modi omnis eos veniam fuga tempore, possimus sit! Doloribus molestiae facere accusamus illum ab voluptates fuga modi pariatur nam corporis esse eius, facilis, optio aperiam nulla perspiciatis incidunt deserunt iste. Eligendi necessitatibus odit fugiat voluptates dolores, magnam omnis labore minima voluptatum doloremque quo voluptas, eius sapiente ab enim numquam veniam sed voluptate repellendus beatae, repudiandae qui. Aperiam dolore animi ab perspiciatis id, odio dicta cumque ea, obcaecati, dolor maiores esse tenetur deserunt sit similique soluta optio. Ducimus id soluta fuga, nihil, culpa possimus unde vel praesentium, debitis accusamus exercitationem sequi. Mollitia quo neque iste quam. Explicabo et ab quidem vero aperiam doloremque sint, ipsam, cum at quo ex harum autem quis dolores reprehenderit eligendi magni delectus commodi distinctio illum, dolor unde error quasi? Itaque facilis, dolorem ipsum esse sed quia unde officiis deserunt harum est aperiam vero tempora ducimus repellendus magni minima. Eius, culpa reprehenderit? Illo doloribus beatae dolore et at omnis magni cumque delectus eius doloremque voluptatem aliquam iure odit commodi molestias eligendi rem quisquam excepturi fugiat veritatis, cum id dignissimos inventore. Quos doloremque modi sunt quisquam ad eius labore quis corrupti nostrum, assumenda molestias nemo culpa est dolorum animi saepe. Molestias explicabo officiis sequi alias esse ratione, quae nobis. Nulla repellat nemo sequi, corrupti fugit, laborum adipisci delectus, error sapiente perferendis quisquam ratione pariatur! Dolorum, inventore?`;
+            elem.append(foo);
+
+            function getScrollBottom(elem) {
+                return elem.scrollHeight - (elem.scrollTop + elem.clientHeight);
+            }
+
+            function getScrollBarWidth() {
+                let elem = document.createElement('div');
+                Object.assign(elem.style, {
+                    overflowY: 'scroll',
+                    height: '50px',
+                    width: '50px',
+                    border: '0',
+                });
+                document.body.prepend(elem);
+                let scrollBarWidth = elem.offsetWidth - elem.clientWidth;
+                elem.remove();
+                return scrollBarWidth;
+            }
+
+            function centerBall(field, ball) {
+                Object.assign(ball.style, {
+                    top: (field.clientHeight / 2 - ball.offsetHeight / 2) + 'px',
+                    left: (field.clientWidth / 2 - ball.offsetWidth / 2) + 'px',
+                })
+            }
+        </script>
+    </body>
+</html>

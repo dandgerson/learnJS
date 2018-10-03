@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Sandbox</title>
+        <style>
+            body {
+                background-color: lightgray;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            .menu ul {
+                display: none;
+                margin: 0;
+            }
+
+            .menu .title {
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            .menu .title:before {
+                content: '▶';
+                padding-right: 6px;
+                color: green;
+            }
+
+            .menu.open ul {
+                display: block;
+            }
+
+            .menu.open .title:before {
+                content: '▼';
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+    </head>
+    <body>
+        <script>
+            
+
+            class Menu {
+                constructor({ template, title, items }) {
+                    this.template = _.template(template);
+                    this.title = title;
+                    this.items = items;
+                }
+                getElem() {
+                    !this._elem && (this._elem = document.createElement('div'));
+                    this._render();
+
+                    this._elem.addEventListener('mousedown', this.mousedown.bind(this));
+                    this._elem.addEventListener('click', this.click.bind(this));
+
+                    return this._elem;
+                }
+                _render() {
+                    this._elem.insertAdjacentHTML('afterBegin', this.template({
+                        data: {
+                            title: this.title,
+                        }   
+                    }));
+                    this._elem = this._elem.firstElementChild;
+                }
+                _renderItems() {
+                    let ul = document.createElement('ul');
+                    for (let item of this.items) {
+                        let li = document.createElement('li');
+                        li.append(item);
+                        ul.append(li);
+                    }
+                    this._elem.append(ul);
+                }
+
+                mousedown(event) {
+                    event.preventDefault();
+                }
+                click(event) {
+                    event.target.closest('.title') && this.toggle();
+                        
+                }
+
+                toggle() {
+                    !this._elem.classList.contains('open') 
+                    ? this.open() : this.close();
+                }
+
+                open() {
+                    this._elem.querySelector('ul') || this._renderItems();
+                    this._elem.classList.add('open');
+                }
+                close() {
+                    this._elem.classList.remove('open');
+                }           
+            }
+
+            let menuData = {
+                title: 'Сладости',
+                items: ['Торт', 'Пончик', 'Бизе', 'Бисквит'],
+                template: `
+                    <div class="menu" id="sweets-menu">
+                        <span class="title"><%-data.title %></span>
+                    </div>`,
+            };
+
+            let menu = new Menu({
+                template: menuData.template,
+                title: menuData.title,
+                items: menuData.items,
+            });
+            document.body.prepend(menu.getElem());
+        </script>
+    </body>
+</html>

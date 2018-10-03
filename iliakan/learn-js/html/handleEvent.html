@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Sandbox</title>
+        <style>
+            body {
+                background-color: lightgray;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+    </head>
+    <body>
+        <input type='button' value='click me'>
+        <div></div>
+        <script>
+            let button = document.querySelector('input');
+            let container = document.querySelector('div');
+
+            class Phrase {
+                constructor({container, trigger, phrase}) {
+                    this.container = container;
+                    this.trigger = trigger;
+                    this.phrase = phrase;
+                    this.trigger.addEventListener('mousedown', this);
+                    this.trigger.addEventListener('mouseup', this);
+                }
+                handleEvent(event) {
+                   this['_' + event.type]();
+                }
+                _mousedown() {
+                    this.showPhrase();
+                }
+                _mouseup() {
+                    this.hidePhrase();
+                }
+                showPhrase() {
+                    this.container.insertAdjacentHTML('afterBegin', `<p>${this.phrase}</p>`);
+                }
+                hidePhrase() {
+                    this.container.innerHTML = '';
+                }
+            }
+            let phrase = new Phrase({
+                container: container,
+                trigger: button,
+                phrase: `Hell of Aqua Lord!!!`,
+            });
+        </script>
+    </body>
+</html>

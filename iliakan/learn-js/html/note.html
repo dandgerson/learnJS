@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Sandbox</title>
+        <style>
+            body {
+                background-color: lightgray;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                height: 2000px;
+            }
+
+            .note {
+                position: fixed;
+                z-index: 1000;
+                padding: 5px;
+                border: 1px solid black;
+                background: white;
+                text-align: center;
+                font: italic 14px Georgia;
+            }
+
+            blockquote {
+                background: #f9f9f9;
+                border-left: 10px solid #ccc;
+                margin: 0 0 0 100px;
+                padding: .5em 10px;
+                quotes: "\201C""\201D""\2018""\2019";
+                display: inline-block;
+                white-space: pre;
+            }
+
+            blockquote:before {
+                color: #ccc;
+                content: open-quote;
+                font-size: 4em;
+                line-height: .1em;
+                margin-right: .25em;
+                vertical-align: -.4em;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+    </head>
+    <body>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit sint atque dolorum fuga ad incidunt voluptatum error fugiat animi amet! Odio temporibus nulla id unde quaerat dignissimos enim nisi rem provident molestias sit tempore omnis recusandae
+    esse sequi officia sapiente.</p>
+        <blockquote>Teacher: Why are you late?
+    Student: There was a man who lost a hundred dollar bill.
+    Teacher: That's nice. Were you helping him look for it?
+    Student: No. I was standing on it.
+  </blockquote>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit sint atque dolorum fuga ad incidunt voluptatum error fugiat animi amet! Odio temporibus nulla id unde quaerat dignissimos enim nisi rem provident molestias sit tempore omnis recusandae
+    esse sequi officia sapiente.</p>
+        <script>
+            class Note {
+                constructor({anchor=document.body, position='top-out', html=`Hell of <b>Aqua Lord</b>`, fixed }={}) {
+                    this.anchor = anchor;
+                    this.position = position;
+                    this.html = html;
+                    this.fixed = fixed ? 'fixed' : 'absolute';
+                }
+
+                getElem() {
+                    this._elem || (this._elem = document.createElement('div'));
+                    this._render();
+                    return this._elem;
+                }
+                _render() {
+                    this._insertHtml(this.html);
+                    this._elem.classList.add('note');
+                    this._elem.style.position = this.fixed;
+                    this.anchor.insertAdjacentElement('afterBegin', this._elem);
+                    this.positionAt(this.position);
+                }
+                _insertHtml(html) {
+                    this._elem.insertAdjacentHTML('afterBegin', html);
+                }
+                positionAt(position) {
+                    let anchorCoords = this.anchor.getBoundingClientRect();
+                    position === 'top-out' && Object.assign(this._elem.style, {
+                        top: anchorCoords.top - this._elem.offsetHeight + 'px',
+                        left: anchorCoords.left + 'px',
+                    });
+                    position === 'top-in' && Object.assign(this._elem.style, {
+                        top: anchorCoords.top + 'px',
+                        left: anchorCoords.left + 'px',
+                    });
+                    position === 'right-out' && Object.assign(this._elem.style, {
+                        top: anchorCoords.top + 'px',
+                        left: anchorCoords.right + 'px',
+                    });
+                    position === 'right-in' && Object.assign(this._elem.style, {
+                        top: anchorCoords.top + 'px',
+                        left: anchorCoords.right - this._elem.offsetWidth + 'px',
+                    });
+                    position === 'bottom-out' && Object.assign(this._elem.style, {
+                        top: anchorCoords.bottom + 'px',
+                        left: anchorCoords.left + 'px',
+                    });
+                    position === 'bottom-in' && Object.assign(this._elem.style, {
+                        top: anchorCoords.bottom - this._elem.offsetHeight + 'px',
+                        left: anchorCoords.left + 'px',
+                    });
+                }
+            }
+            let note = new Note({
+                anchor: document.querySelector('blockquote'),
+            });
+            note.getElem();
+        </script>
+    </body>
+</html>

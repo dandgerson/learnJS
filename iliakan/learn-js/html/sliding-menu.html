@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Sandbox</title>
+        <style>
+            body {
+                background-color: lightgray;
+            }
+
+            .menu::before {
+                font-size: 20px;
+                content: "▶ ";
+                color: green;
+            }
+
+            .menu__title {
+                font-size: 20px;
+                display: inline-block;
+                cursor: pointer;
+            }
+
+            .menu_open::before {
+                content: "▼ ";
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <div class='menu'>
+            <div class='menu__title'>Sweeties (click me)!</div>
+            <ul class='menu__list'>
+                <li>Cake</li>
+                <li>Donut</li>
+                <li>Honey</li>
+            </ul>
+        </div>
+        <script>
+            class SlidingMenu {
+                constructor({ menu }) {
+                    this.title = menu.querySelector('.menu__title');
+                    this.list = menu.querySelector('.menu__list');
+                    this.list.hidden = true;
+                    this.title.addEventListener('click', this.click.bind(this));
+                }
+                click() {
+                    this._toggle();
+                }
+                _toggle() {
+                    this.list.hidden = !this.list.hidden;
+                    this.title.closest('.menu').classList.toggle('menu_open');
+                }
+            }
+            let slidingMenu = new SlidingMenu({
+                menu: document.querySelector('.menu'),
+            });
+        </script>
+    </body>
+</html>

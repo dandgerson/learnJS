@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Sandbox</title>
+        <style>
+            body {
+                background-color: lightgray;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                height: 2000px;
+                /* make body scrollable, the tooltip should work after the scroll */
+            }
+
+            .tooltip {
+                /* some styles for the tooltip, you can use your own instead */
+                position: fixed;
+                padding: 10px 20px;
+                border: 1px solid #b3c9ce;
+                border-radius: 4px;
+                text-align: center;
+                font: italic 14px/1.3 arial, sans-serif;
+                color: #333;
+                background: #fff;
+                box-shadow: 3px 3px 3px rgba(0, 0, 0, .3);
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+    </head>
+    <body>
+        <p>LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa</p>
+        <p>LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa</p>
+        <p>LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa</p>
+        <p>LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa LaLaLa</p>
+        <button data-tooltip="the tooltip is longer than the element">Short button</button>
+        <button data-tooltip="HTML<br>tooltip">One more button</button>
+        <p>Scroll the page to make buttons appear on the top, check if the tooltips show up correctly.</p>
+        <script>
+            class ToolTip {
+                constructor() {
+                    document.addEventListener('mouseover', this);
+                    document.addEventListener('mouseout', this);
+
+                }
+                handleEvent(event) {
+                    this[`_${event.type}`]();
+                }
+                _render() {
+                    this.tooltip = document.createElement('div');
+                    let anchor = event.target;
+                    this.tooltip.innerHTML = `<p>${anchor.dataset.tooltip}</P>`;
+                    this.tooltip.classList.add('tooltip');
+
+                    document.body.prepend(this.tooltip);
+
+                    let anchorCoords = anchor.getBoundingClientRect();
+                    let tooltipCoords = this.tooltip.getBoundingClientRect();
+
+                    let gape, top, left;
+                    gape = 5;
+                    top = pageYOffset + anchorCoords.top - (tooltipCoords.height + gape);
+                    if (anchorCoords.top < tooltipCoords.height + gape) {
+                        top += anchorCoords.height + tooltipCoords.height + gape * 2;
+                    }
+                    left = pageXOffset + anchorCoords.left;
+                    left < 0 && (left = gape);
+                   
+                    Object.assign(this.tooltip.style, {
+                        position: 'absolute',
+                        top: top + 'px',
+                        left: left + 'px',
+
+                    });
+                }
+                _mouseover() {
+                    event.target.dataset.tooltip && this._show();
+                }
+                _mouseout() {
+                    event.target.dataset.tooltip && this._hide();
+                }
+                _show() {
+                    this._render();
+                }
+                _hide() {
+                    this.tooltip.remove();
+                }
+
+            }
+            let tooltip = new ToolTip();
+        </script>
+    </body>
+</html>

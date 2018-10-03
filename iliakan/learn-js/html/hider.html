@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Sandbox</title>
+        <style>
+            body {
+                background-color: lightgray;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+    </head>
+    <body>
+        <input type="button" id="hider" value="Нажмите, чтобы спрятать текст"/>
+        <div id="text">Текст</div>
+        <script>
+            class Hider {
+                constructor({elem, target}) {
+                    this.target = target;
+                    elem.addEventListener('click', this.click.bind(this));
+                }
+                click() {
+                    this.hide()
+                }
+                hide() {
+                    this.target.hidden = true;
+                }
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sandbox</title>
+    <style>
+      body {
+        background-color: lightgray;
+        box-sizing: border-box;
+        padding: 0;
+        padding-top: 20px;
+        overflow: hidden;
+      }
+    </style>
+    <!--     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script> -->
+  </head>
+  <body>
+    <p>Click on the mouse and move it with arrow keys.</p>
+    <pre id="mouse">
+ _   _
+(q\_/p)
+ /. .\
+=\_t_/=   __
+ /   \   (
+((   ))   )
+ /\) (/\  /
+\  Y  /-'
+ nn^nn</pre>
+    <script>
+      const mouse = document.querySelector('#mouse');
+      mouse.addEventListener('focus', handler, true);
+
+      makeFocusable('#mouse');
+
+      function handler(event) {
+        
+        Object.assign(this.style, {
+          padding: 0,
+          margin: 0,
+          position: 'absolute',
+          border: '1px dashed black',
+        });
+        
+        this.addEventListener('keydown', keyListener);
+
+        function keyListener(event) {
+          let coords = this.getBoundingClientRect();
+          switch (event.key) {
+            case 'ArrowUp':
+            Object.assign(this.style, {
+              top: coords.top - coords.height + 'px',
+            });
+            break;
+            case 'ArrowDown':
+            Object.assign(this.style, {
+              top: coords.top + coords.height + 'px',
+            });
+            break;
+            case 'ArrowLeft':
+            Object.assign(this.style, {
+              left: coords.left - coords.width + 'px',
+            });
+            break;
+            case 'ArrowRight':
+            Object.assign(this.style, {
+              left: coords.left + coords.width + 'px',
+            });
+            break;
+          }
+        }
+      }
+
+      function makeFocusable(selector) {
+        let index = 1;
+        const elems = document.querySelectorAll(selector);
+        for (let elem of elems) {
+          elem.tabIndex = index++ + '';
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE message>
+<message lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sandbox</title>
+    <style>
+      body {
+        background-color: lightgray;
+        box-sizing: border-box;
+        padding: 0;
+        padding-top: 20px;
+      }
+
+      .modal {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-color: rgba(0,0,0,0.6);
+        overflow: hidden;
+      }
+
+      .modal .modal-container {
+        width: 300px;
+        height: 200px;
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-around;
+        align-items: center;
+        background-color: lightgreen;
+        border: 2px solid black;
+        border-radius: 5px;
+        box-shadow: 3px 3px 10px 2px;
+      }
+
+      .modal .modal-container .modal-pane {
+        font-family: "Fira code";
+        color: #222222;
+      }
+
+      .modal .modal-container .modal-interface {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+      }
+    </style>
+    <!--     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script> -->
+  </head>
+  <body>
+    <button data-id="button">Button</button>
+    <script>
+      class Prompt {
+        constructor({message='Say <b><i>hello!</i></b>', callback=(value='null') =>{alert(`${value}`) ;}, }={}) {
+          this.message = message;
+          this.callback = callback;
+        }
+        handleEvent(event) {
+          this[`on${event.type[0].toUpperCase() + event.type.slice(1)}`]();
+        }
+        onClick() {
+          if (event.target.hasAttribute('data-id')) {
+            const trigger = event.target.dataset.id;
+            if (trigger === 'cancel') {
+              this.callback();
+              this.hide();
+            }
+          }
+        }
+        onKeydown() {
+          if (event.target === this._elem.querySelector('form').elements.modalInput && event.key === 'Escape') {
+            this.callback();
+            this.hide();
+          }
+        }
+        onSubmit() {
+          event.preventDefault();
+          if (event.target.elements.modalInput.value === '')
+            return;
+          this.callback(event.target.elements.modalInput.value);
+          this.hide();
+
+        }
+        getElem() {
+          this._elem || (this._elem = document.createElement('div'));
+          this._render();
+          return this._elem
+        }
+        _render() {
+          this._elem.classList.add('modal');
+
+          this._container = document.createElement('div');
+          this._container.classList.add('modal-container')
+
+          this._renderPane();
+          this._renderInput();
+          this._renderInterface();
+
+          this._elem.append(this._container);
+
+          this._elem.addEventListener('click', this);
+          this._elem.addEventListener('keydown', this);
+          this._elem.addEventListener('submit', this);
+        }
+        _renderPane() {
+          this._pane = document.createElement('div');
+          this._pane.classList.add('modal-pane');
+          this._pane.insertAdjacentHTML('afterBegin', this.message);
+          this._container.append(this._pane);
+        }
+        _renderInput() {
+          const template = `
+            <form id="modalForm" autocomplete="off">
+              <input type="text" name="modalInput" data-id="modal-input">
+            </form>`;
+          this._container.insertAdjacentHTML('beforeEnd', template);
+        }
+        _renderInterface() {
+          const template = `
+          <div class="modal-interface">
+            <input type="submit" data-id="ok" name="ok" value='ok' form="modalForm">
+            <input type="button" data-id="cancel" name="cancel" value="cancel" form="modalForm">
+          </div>`;
+          this._container.insertAdjacentHTML('beforeEnd', template);
+        }
+        hide() {
+          this._elem.remove();
+        }
+      }
+
+      document.addEventListener('click', event=>{
+        event.target.hasAttribute('data-id') && event.target.dataset.id === 'button' && document.body.prepend(new Prompt().getElem());
+        document.querySelector('[data-id="modal-input"]') && document.querySelector('[data-id="modal-input"]').focus();
+        const form = document.querySelector('#modalForm');
+        if (form) {
+          const firstElem = form.elements[0];
+          const lastElem = form.elements[form.elements.length - 1];
+          firstElem.addEventListener('keydown', event=>{
+            if (event.key === "Tab" && event.shiftKey) {
+              lastElem.focus();
+              event.preventDefault();
+            }
+          });
+          
+          lastElem.addEventListener('keydown', event=>{
+            if (event.key === "Tab" && !event.shiftKey) {
+              firstElem.focus();
+              event.preventDefault();
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</message>
